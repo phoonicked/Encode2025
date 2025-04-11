@@ -12,7 +12,7 @@ export default function TextOutputNode({ data }: TextOutputNodeProps) {
   return (
     <div className="w-[250px]">
       {/* Input handle on the left */}
-      <Handle type="target" position={Position.Left} id="input" data-nodetype="output/text" />
+      <Handle type="target" position={Position.Left} id="input/text" data-nodetype="output/text" />
       <Card>
         <CardHeader>
           <CardTitle>Text Output</CardTitle>

@@ -67,24 +67,9 @@ export function FlowPage() {
       if (!sourceNode || !targetNode) {
         return false;
       }
-  
-      // 3) **Type-based constraints**: 
-      // Example rules: 
-      //   • "input/text" can connect only to "ai/openai" 
-      //   • "ai/openai" can connect only to "output/text" or "output/nft"
-      //   • "output" nodes cannot connect to each other or back to inputs, etc.
-  
-      if (sourceNode.type === 'input/text') {
-        if (!['ai/openai', 'output/text'].includes(targetNode.type || '')) {
-          return false;
-        }
-      } else if (sourceNode.type === 'ai/openai') {
-        // For OpenAI nodes, allow target only if it's "output/text" or "output/nft"
-        if (!['output/text', 'output/nft'].includes(targetNode.type || '')) {
-          return false;
-        }
-      } else if (sourceNode.type?.startsWith('output/')) {
-        // Usually, output nodes are terminal so no outgoing connections
+
+      // Check if connection.source == connection.target (everything after /)
+      if (connection.sourceHandle!.split('/').slice(-1)[0] !== connection.targetHandle!.split('/').slice(-1)[0]) {
         return false;
       }
   

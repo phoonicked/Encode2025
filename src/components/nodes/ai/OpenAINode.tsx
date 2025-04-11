@@ -13,7 +13,7 @@ export default function OpenAINode({ data }: OpenAINodeProps) {
   return (
     <div className="w-[250px]">
       {/* Input handle on the left */}
-      <Handle type="target" position={Position.Left} id="input" data-nodetype="ai/openai"/>
+      <Handle type="target" position={Position.Left} id="input/text" data-nodetype="ai/openai"/>
       <Card>
         <CardHeader>
           <CardTitle>OpenAI Agent</CardTitle>
@@ -32,7 +32,7 @@ export default function OpenAINode({ data }: OpenAINodeProps) {
         </CardContent>
       </Card>
       {/* Output handle on the right */}
-      <Handle type="source" position={Position.Right} id="output" data-nodetype="ai/openai"/>
+      <Handle type="source" position={Position.Right} id="output/text" data-nodetype="ai/openai"/>
     </div>
   );
 }

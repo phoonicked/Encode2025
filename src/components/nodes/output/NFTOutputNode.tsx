@@ -13,7 +13,7 @@ export default function NFTOutputNode({ data }: NFTOutputNodeProps) {
   return (
     <div className="w-[250px]">
       {/* Input handle on the left */}
-      <Handle type="target" position={Position.Left} id="input" data-nodetype="output/nft"/>
+      <Handle type="target" position={Position.Left} id="input/nft" data-nodetype="output/nft"/>
       <Card>
         <CardHeader>
           <CardTitle>NFT Output</CardTitle>
