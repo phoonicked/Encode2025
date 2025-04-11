@@ -120,6 +120,27 @@ export function FlowPage() {
     setNodes((nds) => [...nds, newNode]);
   };
 
+  const handleSaveData = async () => {
+    // Create your agent data object
+    const savedData = {
+      name: "My Agent",
+      description: "This is a test agent",
+      nodes,
+      edges,
+      createdAt: new Date(),
+    };
+
+    try {
+      // Create a new document reference in the "agents" collection with an auto-generated ID
+      const newAgentRef = doc(collection(db, "agents"));
+      // Save the data to the new document
+      await setDoc(newAgentRef, savedData);
+      console.log("Agent saved successfully with ID:", newAgentRef.id);
+    } catch (error) {
+      console.error("Error saving agent data:", error);
+    }
+  };
+
   // Handler to log nodes and edges
   const handleLogFlowData = useCallback(() => {
     console.log("Nodes:", nodes);
