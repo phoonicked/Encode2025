@@ -1,11 +1,13 @@
 // src/components/FlowPage.tsx
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import { useParams } from 'react-router-dom';  // Import useParams for route parameters
 import Flow from './components/flow'; // Your stateless Flow component
 // Import your UI components (adjust the paths as needed)
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { collection, setDoc, doc } from 'firebase/firestore';
+// Import Firestore functions, including getDoc for loading agent data
+import { collection, setDoc, doc, getDoc } from 'firebase/firestore';
 import { db } from './firebaseConfig';
 
 import {
@@ -31,11 +33,35 @@ interface AvailableNodeOption {
 }
 
 export function FlowPage() {
+  // Get the agentId from the URL parameters (if editing an existing agent)
+  const { agentId } = useParams<{ agentId: string }>();
+
   // State for nodes and edges
   const [nodes, setNodes] = useState<Node[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
-  // State for the search query
+  // State for the search query used in the sidebar
   const [searchQuery, setSearchQuery] = useState<string>('');
+
+  // If an agentId is provided, load its nodes/edges from Firestore on mount
+  useEffect(() => {
+    if (agentId) {
+      const agentDocRef = doc(db, "agents", agentId);
+      getDoc(agentDocRef)
+        .then((docSnap) => {
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            // Set nodes and edges from the saved document (default to empty arrays if not present)
+            setNodes(data.nodes || []);
+            setEdges(data.edges || []);
+          } else {
+            console.warn("Agent not found");
+          }
+        })
+        .catch((error) => {
+          console.error("Error loading agent data:", error);
+        });
+    }
+  }, [agentId]);
 
   // Callbacks to update nodes and edges
   const onNodesChange: OnNodesChange = useCallback(
@@ -74,12 +100,11 @@ export function FlowPage() {
       const sourceHandle = document.querySelector("[data-handleid='" + connection.sourceHandle + "']");
       const targetHandle = document.querySelector("[data-handleid='" + connection.targetHandle + "']");
 
-      // Get the data-type property on the element
+      // Get the data-type property on the elements
       const sourceType = sourceHandle?.getAttribute('data-type');
       const targetType = targetHandle?.getAttribute('data-type');
 
-
-      // Check if connection.source == connection.target (everything after /)
+      // Check if the connection types match (comparing the type postfix after the /)
       if (sourceType!.split('/').slice(-1)[0] !== targetType!.split('/').slice(-1)[0]) {
         return false;
       }
@@ -87,31 +112,28 @@ export function FlowPage() {
       // Prevent self-connection
       if (sourceNode.id === targetNode.id) return false;
   
-      // 4) **Cycle check** (keeps your existing anti-cycle logic)
+      // 4) Cycle check
       const hasCycle = (node: Node, visited = new Set<string>()): boolean => {
         if (visited.has(node.id)) return false;
         visited.add(node.id);
  
         for (const outgoer of getOutgoers(node, currentNodes, currentEdges)) {
-          // if the outgoer is the source of the new connection, it forms a cycle
           if (outgoer.id === connection.source) return true;
           if (hasCycle(outgoer, visited)) return true;
         }
         return false;
       };
   
-      // 5) Extra safeguard: disallow if source == target
+      // Extra safeguard: disallow if source equals target
       if (targetNode.id === sourceNode.id) {
         return false;
       }
   
-      // 6) Return the inverse of "cycle detected"
+      // Return true if no cycle is detected
       return !hasCycle(targetNode);
     },
     [getNodes, getEdges]
   );
-  
-  
 
   // Handler to add a node at a random position
   const handleAddNode = (option: AvailableNodeOption) => {
@@ -129,10 +151,10 @@ export function FlowPage() {
     setNodes((nds) => [...nds, newNode]);
   };
 
+  // Save data handler: updates existing agent if agentId exists; otherwise creates a new document
   const handleSaveData = async () => {
-    // Create your agent data object
     const savedData = {
-      name: "My Agent",
+      name: "My Agent", // You can allow editing these properties
       description: "This is a test agent",
       nodes,
       edges,
@@ -142,17 +164,18 @@ export function FlowPage() {
     console.log(savedData);
 
     try {
-      // Create a new document reference in the "agents" collection with an auto-generated ID
-      const newAgentRef = doc(collection(db, "agents"));
-      // Save the data to the new document
-      await setDoc(newAgentRef, savedData);
-      console.log("Agent saved successfully with ID:", newAgentRef.id);
+      // If agentId exists, update that document; if not, create a new one
+      const agentDocRef = agentId
+        ? doc(db, "agents", agentId)
+        : doc(collection(db, "agents"));
+      await setDoc(agentDocRef, savedData);
+      console.log("Agent saved successfully with ID:", agentDocRef.id);
     } catch (error) {
       console.error("Error saving agent data:", error);
     }
   };
 
-  // Handler to log nodes and edges
+  // Handler to log nodes and edges for debugging
   const handleLogFlowData = useCallback(() => {
     console.log("Nodes:", nodes);
     console.log("Edges:", edges);
@@ -191,7 +214,7 @@ export function FlowPage() {
     { label: 'NFT Output', type: 'output/nft' },
   ];
 
-  // Filter based on search query (case-insensitive)
+  // Filter available nodes based on the search query (case-insensitive)
   const filteredNodes = availableNodes.filter((nodeItem) =>
     nodeItem.label.toLowerCase().includes(searchQuery.toLowerCase())
   );
