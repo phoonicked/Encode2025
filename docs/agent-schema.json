@@ -1,0 +1,45 @@
+{
+    "name": "<Agent Name>",
+    "description": "<Agent Description>",
+    "nodes": [
+        {
+            "type": "ai/openai",
+            "id": "1",
+            "pos": [-192, 1002],
+            "options": {
+                "model": "gpt-3.5-turbo",
+                "temperature": 0.7,
+                "max_tokens": 1000,
+                "top_p": 1,
+                "frequency_penalty": 0,
+                "presence_penalty": 0
+            }
+        },
+        {
+            "type": "input/text",
+            "id": "2",
+            "pos": [-192, 1002],
+            "options": {
+            }
+        },
+        {
+            "type": "output/text",
+            "id": "3",
+            "pos": [-192, 1002],
+            "options": {
+            }
+        }
+    ],
+    "connections": [
+        {
+            "from": {
+                "node": "1",
+                "port": "<Port ID>"
+            },
+            "to": {
+                "node": "2",
+                "port": "<Port ID>"
+            }
+        }
+    ]
+}
