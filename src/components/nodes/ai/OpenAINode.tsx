@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 export default function OpenAINode(data: any) {
     return (
         <>
-            <Handle type="target" position={Position.Top} id="input"/>
+            <Handle type="target" position={Position.Left} id="input"/>
             <Card>
                 <CardHeader>
                     <CardTitle>OpenAI Agent</CardTitle>
@@ -24,7 +24,7 @@ export default function OpenAINode(data: any) {
                     </Select>
                 </CardContent>
             </Card>
-            <Handle type="source" position={Position.Bottom} id="output" />
+            <Handle type="source" position={Position.Right} id="output" />
         </>
     );
 }

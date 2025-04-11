@@ -99,7 +99,7 @@ export function FlowPage() {
           const connectedEdges = getConnectedEdges([node], edges);
  
           const remainingEdges = acc.filter(
-            (edge) => !connectedEdges.includes(edge),
+            (edge: any) => !connectedEdges.includes(edge),
           );
  
           const createdEdges = incomers.flatMap(({ id: source }) =>
@@ -121,7 +121,6 @@ export function FlowPage() {
   // List of available node options (each with a label and a type)
   const availableNodes: AvailableNodeOption[] = [
     { label: 'Text Input', type: 'input/text' },
-    { label: 'Voice Input', type: 'input/speech' },
     { label: 'OpenAI Agent', type: 'ai/openai' },
     { label: 'Text Output', type: 'output/text' },
     { label: 'NFT Output', type: 'output/nft' },
