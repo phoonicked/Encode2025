@@ -31,11 +31,10 @@ function Home({
   const [count, setCount] = useState<number>(0);
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-purple-800">
-
+    <div className="flex justify-center items-center min-h-screen bg-zinc-900">
       <DeformCanvas />
-      <div className="flex justify-between items-center w-full max-w-4xl mx-auto p-2 border-2 border-black rounded-full">
-        <div className="flex space-x-2 ml-2">
+      <div className="flex justify-between items-center w-full max-w-4xl mx-auto p-2 bg-white shadow-md z-10 relative rounded-full pointer-events-none">
+        <div className="flex space-x-2 ml-2 pointer-events-auto">
           <Link to="/wormhole">
             <Button variant="outline" className="rounded-full font-medium">
               wormhole
@@ -62,7 +61,7 @@ function Home({
             <TooltipTrigger asChild>
               <Button
                 variant="outline"
-                className="rounded-full px-6 py-2 font-medium mr-2 flex items-center"
+                className="rounded-full px-6 py-2 font-medium mr-2 flex items-center pointer-events-auto"
                 onClick={connectWalletDirectly}
               >
                 {walletAddress ? (
