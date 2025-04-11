@@ -2,12 +2,10 @@ import { Handle, Position } from '@xyflow/react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';
 
-const handleStyle = { left: 10 };
-
 export default function OpenAINode(data: any) {
     return (
         <>
-            <Handle type="target" position={Position.Top} />
+            <Handle type="target" position={Position.Top} id="input"/>
             <Card>
                 <CardHeader>
                     <CardTitle>OpenAI Agent</CardTitle>
@@ -25,8 +23,7 @@ export default function OpenAINode(data: any) {
                     </Select>
                 </CardContent>
             </Card>
-            <Handle type="source" position={Position.Bottom} id="a" />
-            <Handle type="source" position={Position.Bottom} id="b" style={handleStyle} />
+            <Handle type="source" position={Position.Bottom} id="output" />
         </>
     );
 }

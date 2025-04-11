@@ -7,27 +7,12 @@ import './App.css';
 import WormholeScreen from './WormholeScreen';
 import { FlowPage } from './flowpage'; // Adjust path as needed
 import { Button } from "./components/ui/button";
+import ZoraMint from './ZoraMint';
 
 // Home screen component with wallet connection and navigation buttons
-function Home() {
-  const [walletAddress, setWalletAddress] = useState<string>('');
-  const [count, setCount] = useState<number>(0);
+function Home({ walletAddress, connectWalletDirectly }: { walletAddress: string, connectWalletDirectly: () => void }) {
 
-  const connectWalletDirectly = async () => {
-    try {
-      if ((window as any).ethereum) {
-        const accounts = await (window as any).ethereum.request({ method: 'eth_requestAccounts' });
-        if (accounts && accounts.length > 0) {
-          setWalletAddress(accounts[0]);
-          console.log('Direct wallet connection successful:', accounts[0]);
-        }
-      } else {
-        alert('No Ethereum wallet detected. Please install MetaMask or another supported wallet.');
-      }
-    } catch (error) {
-      console.error('Error connecting wallet directly:', error);
-    }
-  };
+  const [count, setCount] = useState<number>(0);
 
   return (
     <div className="App">
@@ -48,6 +33,9 @@ function Home() {
           </Button>
           <Button>
             <Link to="/flowpage">Go to Flow Page</Link>
+          </Button>
+          <Button>
+            <Link to="/mint">Linganguliguliguliwacha</Link>
           </Button>
           {/* Wallet Connection */}
           {walletAddress ? (
@@ -96,12 +84,31 @@ function WormholeWrapper() {
 
 // Main App component with router configuration
 function App() {
+
+  const [walletAddress, setWalletAddress] = useState<string>('');
+  const connectWalletDirectly = async () => {
+    try {
+      if ((window as any).ethereum) {
+        const accounts = await (window as any).ethereum.request({ method: 'eth_requestAccounts' });
+        if (accounts && accounts.length > 0) {
+          setWalletAddress(accounts[0]);
+          // console.log('Direct wallet connection successful:', accounts[0]);
+        }
+      } else {
+        alert('No Ethereum wallet detected. Please install MetaMask or another supported wallet.');
+      }
+    } catch (error) {
+      console.error('Error connecting wallet directly:', error);
+    }
+  };
+
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home walletAddress={walletAddress} connectWalletDirectly={connectWalletDirectly}/>} />
         <Route path="/flowpage" element={<FlowPageWrapper />} />
         <Route path="/wormhole" element={<WormholeWrapper />} />
+        <Route path="/mint" element={<ZoraMint walletAddress={walletAddress} />} />
       </Routes>
     </BrowserRouter>
   );
