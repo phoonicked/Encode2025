@@ -3,79 +3,105 @@
   "description": "This is a test agent",
   "nodes": [
     {
-      "id": "1744410112969",
+      "id": "1744413767314",
       "data": {
-        "label": "OpenAI Agent",
-        "enableFunctions": true,
-        "function": {
-          "outputType": "text",
-          "description": "Create an NFT with the provided text."
-        },
-        "systemPrompt": "You are an AI that creates NFTs based on user input",
-        "model": "gpt-3.5-turbo"
+        "label": "Mint NFT",
+        "chain": "ethereum",
+        "metadata": "NFT"
       },
       "position": {
-        "x": 77.16402523141869,
-        "y": -137.89577160666386
+        "x": 99.44622836011825,
+        "y": 351.2810254189819
+      },
+      "type": "chain/mint",
+      "measured": {
+        "width": 250,
+        "height": 272
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "1744413773841",
+      "data": {
+        "label": "OpenAI Agent",
+        "systemPrompt": "Create an NFT with the users text.",
+        "model": "gpt-3.5-turbo",
+        "enableFunctions": true,
+        "function": {
+          "description": "Mints an NFT with the input text.",
+          "outputType": "text"
+        }
+      },
+      "position": {
+        "x": -229.92236853143766,
+        "y": 158.14762307855864
       },
       "type": "ai/openai",
       "measured": {
         "width": 250,
         "height": 448
       },
-      "selected": true,
+      "selected": false,
       "dragging": false
     },
     {
-      "id": "1744410131397",
+      "id": "1744413808992",
+      "data": {
+        "label": "NFT Output"
+      },
+      "position": {
+        "x": 402.5911568142663,
+        "y": 382.0221024151583
+      },
+      "type": "output/nft",
+      "measured": {
+        "width": 250,
+        "height": 84
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "1744413820110",
       "data": {
         "label": "Text Input"
       },
       "position": {
-        "x": -273.8760918391125,
-        "y": -19.917040154627607
+        "x": -654.7539712654734,
+        "y": 324.68060009614146
       },
       "type": "input/text",
       "measured": {
         "width": 250,
         "height": 84
       },
-      "selected": false,
-      "dragging": false
-    },
-    {
-      "id": "1744410149015",
-      "data": {
-        "label": "Text Output"
-      },
-      "position": {
-        "x": 529.4314999247897,
-        "y": -51.33622709278757
-      },
-      "type": "output/text",
-      "measured": {
-        "width": 250,
-        "height": 84
-      },
-      "selected": false,
+      "selected": true,
       "dragging": false
     }
   ],
   "edges": [
     {
-      "source": "1744410131397",
-      "sourceHandle": "output/text",
-      "target": "1744410112969",
+      "source": "1744413773841",
+      "sourceHandle": "output/b",
+      "target": "1744413767314",
       "targetHandle": "input/text",
-      "id": "xy-edge__1744410131397output/text-1744410112969input/text"
+      "id": "xy-edge__1744413773841output/b-1744413767314input/text"
     },
     {
-      "source": "1744410112969",
-      "sourceHandle": "output/a",
-      "target": "1744410149015",
+      "source": "1744413767314",
+      "sourceHandle": "output/nft",
+      "target": "1744413808992",
+      "targetHandle": "input/nft",
+      "id": "xy-edge__1744413767314output/nft-1744413808992input/nft"
+    },
+    {
+      "source": "1744413820110",
+      "sourceHandle": "output/text",
+      "target": "1744413773841",
       "targetHandle": "input/text",
-      "id": "xy-edge__1744410112969output/a-1744410149015input/text"
+      "id": "xy-edge__1744413820110output/text-1744413773841input/text"
     }
   ],
-  "createdAt": "2025-04-11T22:26:19.198Z"
+  "createdAt": "2025-04-11T23:23:48.877Z"
 }

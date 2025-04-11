@@ -17,6 +17,7 @@ import TextInputNode from './nodes/inputs/TextInputNode';
 import TextOutputNode from './nodes/output/TextOutputNode';
 import NFTOutputNode from './nodes/output/NFTOutputNode';
 import "./flow.css";
+import MintNode from './nodes/chain/MintNode';
 
 interface FlowProps {
   nodes: Node[];
@@ -42,6 +43,7 @@ export default function Flow({
   const nodeTypes = useMemo(
     () => ({
       'ai/openai': OpenAINode,
+      'chain/mint': MintNode,
       'input/text': TextInputNode,
       'output/text': TextOutputNode,
       'output/nft': NFTOutputNode,

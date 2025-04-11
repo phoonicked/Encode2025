@@ -95,6 +95,18 @@ class OpenAINode(Node):
 
         # Simulate API call
         return res
+    
+class MintNode(Node):
+
+    def execute(self, inputs: list[Datum], context: CallingCtx) -> list[Datum]:
+        """
+        Simulates minting an NFT with the given input text and wallet address.
+        """
+        # Simulate minting an NFT
+
+        # Establish websocket connection
+
+        return [NFTDatum(inputs[0].tostring())]
 
 class InputText(InputNode):
 
