@@ -2,17 +2,17 @@ import { Handle, Position } from '@xyflow/react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/card';
 import { Input } from '../../ui/input';
 
-export default function LocationInputNode() {
+export default function NFTOutputNode() {
   return (
     <>
-      <Handle type="source" position={Position.Bottom} id="output" />
+      <Handle type="target" position={Position.Top} id="input" />
       <Card>
         <CardHeader>
-          <CardTitle>Location Input</CardTitle>
-          <CardDescription>Provide or auto-detect location.</CardDescription>
+          <CardTitle>NFT Output</CardTitle>
+          <CardDescription>Output an NFT.</CardDescription>
         </CardHeader>
         <CardContent>
-          <Input placeholder="Enter coordinates or city..." className="w-full" />
+          <Input placeholder="Contract address" className="mb-2" />
         </CardContent>
       </Card>
     </>

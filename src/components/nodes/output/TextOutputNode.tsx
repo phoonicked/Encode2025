@@ -1,17 +1,17 @@
 import { Handle, Position } from '@xyflow/react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/card';
 
-export default function ChatOutputNode() {
+export default function TextOutputNode() {
   return (
     <>
       <Handle type="target" position={Position.Top} id="input" />
       <Card>
         <CardHeader>
-          <CardTitle>Chat Output</CardTitle>
-          <CardDescription>Sends output to the in-app chat interface.</CardDescription>
+          <CardTitle>Text Output</CardTitle>
+          <CardDescription>Sends output in text format.</CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground text-sm">Connect any AI output here to display it in chat.</p>
+          <p className="text-muted-foreground text-sm">...</p>
         </CardContent>
       </Card>
     </>
