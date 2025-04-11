@@ -1,54 +1,67 @@
 // src/components/nodes/OpenAINode.tsx
 import React from 'react';
-import { Handle, Position } from '@xyflow/react';
+import { Handle, Position, useReactFlow } from '@xyflow/react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea'; // Import Textarea component
 import { OpenAINodeData } from '@/types';
 
 interface OpenAINodeProps {
   data: OpenAINodeData;
+  id: string;
+  updateNodeData: (id: string, updates: Partial<OpenAINodeData>) => void;
 }
 
-export default function OpenAINode({ data }: OpenAINodeProps) {
-  const updateFunction = (key: string, value: string) => {
-    data.function = { ...data.function, [key]: value }; // Update React Flow data
-  };
+export default function OpenAINode({ data, id }: OpenAINodeProps) {
 
-  const toggleEnableFunctions = (enabled: boolean) => {
-    data.enableFunctions = enabled; // Update React Flow data
-  };
+  const { updateNodeData } = useReactFlow();
 
   return (
     <div className="w-[250px]">
       {/* Input handle on the left */}
-      <Handle type="target" position={Position.Left} id="input/text"/>
+      <Handle type="target" position={Position.Left} id="input/text" />
       <Card>
         <CardHeader>
           <CardTitle>OpenAI Agent</CardTitle>
           <CardDescription>Connect to an OpenAI LLM agent.</CardDescription>
         </CardHeader>
         <CardContent>
+          {/* System Prompt */}
+          <div className="grid w-full max-w-sm items-center gap-1.5">
+            <Label htmlFor="system-prompt">System Prompt</Label>
+            <Textarea
+              id="system-prompt"
+              placeholder="Enter system prompt..."
+              value={data.systemPrompt || ''}
+              onChange={(e) => updateNodeData(id, { systemPrompt: e.target.value })}
+            />
+          </div>
+
           {/* Model Selection */}
-          <Select
-            value={data.model || ''}
-            onValueChange={(value) => (data.model = value)} // Update React Flow data
-          >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="AI Model" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="gpt-3.5-turbo">GPT 3.5 Turbo</SelectItem>
-              <SelectItem value="gpt-4">GPT 4.0</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="grid w-full max-w-sm items-center gap-1.5 mt-4">
+            <Label htmlFor="model">AI Model</Label>
+            <Select
+              value={data.model || ''}
+              onValueChange={(value) => updateNodeData(id, { model: value })}
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="AI Model" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="gpt-3.5-turbo">GPT 3.5 Turbo</SelectItem>
+                <SelectItem value="gpt-4">GPT 4.0</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
           {/* Toggle for Function Definition */}
           <div className="mt-4 flex items-center">
             <Switch
               checked={data.enableFunctions || false}
-              onCheckedChange={toggleEnableFunctions}
+              onCheckedChange={(enabled) => updateNodeData(id, { enableFunctions: enabled })}
               className="mr-2"
             />
             <span className="text-sm">Enable Function Definition</span>
@@ -57,32 +70,49 @@ export default function OpenAINode({ data }: OpenAINodeProps) {
           {/* Function Definition UI */}
           {data.enableFunctions && (
             <div className="mt-4">
-              <h4 className="text-sm font-medium">Define ChatGPT Function</h4>
-              <Input
-                className="mt-2"
-                placeholder="Function Description"
-                value={data.function?.description || ''}
-                onChange={(e) => updateFunction('description', e.target.value)}
-              />
-              <Select
-                // className="mt-2"
-                value={data.function?.outputType || 'Text'}
-                onValueChange={(value) => updateFunction('outputType', value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Output Type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Text">Text</SelectItem>
-                  <SelectItem value="NFT">NFT</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="grid w-full max-w-sm items-center gap-1.5">
+                <Label htmlFor="function-description">Function Description</Label>
+                <Textarea
+                  id="function-description"
+                  placeholder="Enter function description..."
+                  value={data.function?.description || ''}
+                  onChange={(e) =>
+                    updateNodeData(id, {
+                      function: { ...data.function, description: e.target.value },
+                    })
+                  }
+                />
+              </div>
+              <div className="grid w-full max-w-sm items-center gap-1.5 mt-4">
+                <Label htmlFor="output-type">Output Type</Label>
+                <Select
+                  value={data.function?.outputType || 'Text'}
+                  onValueChange={(value) =>
+                    updateNodeData(id, {
+                      function: { ...data.function, outputType: value },
+                    })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Output Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="text">Text</SelectItem>
+                    <SelectItem value="nft">NFT</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           )}
         </CardContent>
       </Card>
-      {/* Output handle on the right */}
-      <Handle type="source" position={Position.Right} id="output/text"/>
+      {/* Distribute vertically */}
+      <div className="flex-grow flex flex-col justify-between items-center">
+      <Handle type="source" position={Position.Right} id="output/text" style={{top: data.enableFunctions ? '33%' : '50%'}}/>
+      {data.enableFunctions && (
+        <Handle type="source" position={Position.Right} id={`output/${data.function.outputType}`} style={{top: '66%'}}/>
+      )}
+      </div>
     </div>
   );
 }

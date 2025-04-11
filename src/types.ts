@@ -25,6 +25,7 @@ export interface BaseNodeData {
   // Data type for OpenAI node
   export interface OpenAINodeData extends BaseNodeData {
     model: string; // e.g., "gpt-3.5-turbo" or "gpt-4"
+    systemPrompt: string;
     enableFunctions: boolean;
     function: {
       description: string;
