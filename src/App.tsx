@@ -5,6 +5,7 @@ import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
 import './App.css';
 import WormholeScreen from './WormholeScreen';
+import { Button } from "@/components/ui/button"
 
 function App() {
   const [showWormhole, setShowWormhole] = useState<boolean>(false);
@@ -32,7 +33,7 @@ function App() {
     return (
       <div className="App">
         <header>
-          <button onClick={() => setShowWormhole(false)}>Back</button>
+          <Button onClick={() => setShowWormhole(false)}>Back</Button>
         </header>
         
         <WormholeScreen />
@@ -52,21 +53,21 @@ function App() {
           </a>
         </div>
         <h1>Vite + React</h1>
-        <button onClick={() => setShowWormhole(true)}>
+        <Button onClick={() => setShowWormhole(true)}>
           Go to Wormhole Connect
-        </button>
+        </Button>
         {walletAddress ? (
             <p>Connected Wallet: {walletAddress}</p>
           ) : (
             <>
-              <button onClick={connectWalletDirectly}>Connect Wallet Directly</button>
+              <Button onClick={connectWalletDirectly}>Connect Wallet Directly</Button>
             </>
           )}
       </header>
       <div className="card">
-        <button onClick={() => setCount(count + 1)}>
+        <Button onClick={() => setCount(count + 1)}>
           count is {count}
-        </button>
+        </Button>
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR.
         </p>
