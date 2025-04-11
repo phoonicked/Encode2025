@@ -14,7 +14,7 @@ import AgentsDashboard from "./Dashboard";
 import { ReactFlowProvider } from "@xyflow/react";
 import DeformCanvas from "./components/DeformCanvas";
 
-// Example icons (Heroicons, Lucide, or your own)
+// Example icons (using Heroicons or similar)
 function PlusIcon() {
   return (
     <svg
@@ -108,7 +108,7 @@ function HomeScreen({
             <input
               type="text"
               placeholder="Ask anything"
-              className="bg-transparent flex-1 focus:outline-none text-white placeholder-gray-400 w-2.5"
+              className="bg-transparent flex-1 focus:outline-none text-white placeholder-gray-400"
             />
           </div>
 
@@ -122,14 +122,23 @@ function HomeScreen({
               <DashboardIcon />
               Dashboard
             </Button>
-            <Button
-              variant="default"
-              className="w-1/2 flex items-center justify-center gap-2 rounded-full px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-white"
-              onClick={connectWalletDirectly}
-            >
-              <WalletIcon />
-              {walletAddress ? "Connected" : "Connect Wallet"}
-            </Button>
+            {/* Wrap Connect Wallet in a relative container to show tooltip on hover */}
+            <div className="relative group w-1/2">
+              <Button
+                variant="default"
+                className="w-full flex items-center justify-center gap-2 rounded-full px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-white"
+                onClick={connectWalletDirectly}
+              >
+                <WalletIcon />
+                {walletAddress ? "Connected" : "Connect Wallet"}
+              </Button>
+              {/* Tooltip displayed on hover if wallet is connected */}
+              {walletAddress && (
+                <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition duration-300">
+                  {walletAddress}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -205,7 +214,7 @@ function AgentsDashboardWrapper() {
   );
 }
 
-// Main App component
+// Main App component with router configuration
 function App() {
   const [walletAddress, setWalletAddress] = useState<string>("");
 
