@@ -1,86 +1,137 @@
+// App.tsx
 import { useState } from "react";
 import {
   BrowserRouter,
   Routes,
   Route,
-  Link,
   useNavigate,
 } from "react-router-dom";
 import WormholeScreen from "./WormholeScreen";
 import { FlowPage } from "./flowpage";
 import ZoraMint from "./ZoraMint";
 import { Button } from "./components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "./components/ui/tooltip";
 import AgentsDashboard from "./Dashboard";
 import { ReactFlowProvider } from "@xyflow/react";
 import DeformCanvas from "./components/DeformCanvas";
 
-// Home screen component with navigation bar
-function Home({
+// Example icons (Heroicons, Lucide, or your own)
+function PlusIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-5 w-5"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+    </svg>
+  );
+}
+
+function MicIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-5 w-5"
+      fill="currentColor"
+      viewBox="0 0 448 512"
+    >
+      <path d="M224 352c53 0 96-43 96-96V96c0-53-43-96-96-96s-96 43-96 96v160c0 53 43 96 96 96zm48-96V96c0-26.5-21.5-48-48-48s-48 21.5-48 48v160c0 26.5 21.5 48 48 48s48-21.5 48-48zM368 192c-8.8 0-16 7.2-16 16 0 79.5-64.5 144-144 144s-144-64.5-144-144c0-8.8-7.2-16-16-16s-16 7.2-16 16c0 94.3 69 172.2 160 183.2V432h-56c-13.3 0-24 10.7-24 24s10.7 24 24 24h160c13.3 0 24-10.7 24-24s-10.7-24-24-24h-56v-56.8c91-11 160-88.9 160-183.2 0-8.8-7.2-16-16-16z" />
+    </svg>
+  );
+}
+
+function DashboardIcon() {
+  return (
+    <svg
+      className="h-5 w-5"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.5}
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M3 3h7v7H3V3zm0 11h7v7H3v-7zm11-11h7v7h-7V3zm0 11h7v7h-7v-7z"
+      />
+    </svg>
+  );
+}
+
+function WalletIcon() {
+  return (
+    <svg
+      className="h-5 w-5"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.5}
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M21 7.5V6a2 2 0 00-2-2H5A2 2 0 003 6v12a2 2 0 002 2h14a2 2 0 002-2v-1.5M7 10.5h10a2 2 0 010 4H7a2 2 0 010-4z"
+      />
+    </svg>
+  );
+}
+
+function HomeScreen({
   walletAddress,
   connectWalletDirectly,
 }: {
   walletAddress: string;
   connectWalletDirectly: () => void;
 }) {
+  const navigate = useNavigate();
+
   return (
-    <div className="min-h-screen bg-zinc-900">
-      <div className="fixed top-0 left-0 right-0 flex justify-center items-center p-4 z-20">
-        <div className="flex justify-between items-center w-full max-w-4xl mx-auto p-2 bg-white/20 backdrop-blur-md shadow-md rounded-full border border-white/30">
-          <div className="flex space-x-2 mr-2">
-            <Button asChild variant="outline" className="rounded-full font-medium">
-              <Link to="/wormhole">wormhole</Link>
+    <div className="min-h-screen bg-zinc-900 text-white relative">
+      {/* Background Canvas */}
+      <DeformCanvas />
+
+      {/* Center the entire content */}
+      <div className="flex items-center justify-center h-screen px-4">
+        {/* Glassmorphic Container for the prompt UI */}
+        <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 shadow-xl w-full max-w-lg space-y-6">
+          {/* Heading */}
+          <h1 className="text-center text-3xl md:text-4xl font-semibold">
+            What can I help with?
+          </h1>
+
+          {/* Prompt / Input Bar */}
+          <div className="flex items-center bg-zinc-800 rounded-full shadow px-4 py-2 space-x-2 w-115 h-14">
+            {/* Text Input */}
+            <input
+              type="text"
+              placeholder="Ask anything"
+              className="bg-transparent flex-1 focus:outline-none text-white placeholder-gray-400 w-2.5"
+            />
+          </div>
+
+          {/* Dashboard & Connect Wallet Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-between">
+            <Button
+              variant="default"
+              className="w-1/2 flex items-center justify-center gap-2 rounded-full px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-white"
+              onClick={() => navigate("/agents")}
+            >
+              <DashboardIcon />
+              Dashboard
             </Button>
-            <Button asChild variant="outline" className="rounded-full font-medium">
-              <Link to="/flowpage">flow</Link>
-            </Button>
-            <Button asChild variant="outline" className="rounded-full font-medium">
-              <Link to="/mint">Linganguliguliguliwacha</Link>
-            </Button>
-            <Button asChild variant="outline" className="rounded-full font-medium">
-              <Link to="/agents">Dashboard</Link>
+            <Button
+              variant="default"
+              className="w-1/2 flex items-center justify-center gap-2 rounded-full px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-white"
+              onClick={connectWalletDirectly}
+            >
+              <WalletIcon />
+              {walletAddress ? "Connected" : "Connect Wallet"}
             </Button>
           </div>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="rounded-full px-6 py-2 font-medium ml-2 flex items-center"
-                  onClick={connectWalletDirectly}
-                >
-                  {walletAddress ? (
-                    <div className="flex items-center">
-                      connected
-                      <div className="ml-2 relative">
-                        <span className="relative flex h-3 w-3">
-                          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"></span>
-                          <span className="relative inline-flex h-3 w-3 rounded-full bg-green-500"></span>
-                        </span>
-                      </div>
-                    </div>
-                  ) : (
-                    "connect wallet"
-                  )}
-                </Button>
-              </TooltipTrigger>
-              {walletAddress && (
-                <TooltipContent>
-                  <p>{walletAddress}</p>
-                </TooltipContent>
-              )}
-            </Tooltip>
-          </TooltipProvider>
         </div>
-      </div>
-      <DeformCanvas />
-      <div className="flex justify-center items-center min-h-screen">
-        {/* Main content area */}
       </div>
     </div>
   );
@@ -145,6 +196,7 @@ function ZoraMintWrapper({ walletAddress }: { walletAddress: string }) {
   );
 }
 
+// Wrapper for AgentsDashboard
 function AgentsDashboardWrapper() {
   return (
     <div className="min-h-screen">
@@ -153,7 +205,7 @@ function AgentsDashboardWrapper() {
   );
 }
 
-// Main App component with router configuration
+// Main App component
 function App() {
   const [walletAddress, setWalletAddress] = useState<string>("");
 
@@ -183,7 +235,7 @@ function App() {
         <Route
           path="/"
           element={
-            <Home
+            <HomeScreen
               walletAddress={walletAddress}
               connectWalletDirectly={connectWalletDirectly}
             />
