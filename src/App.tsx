@@ -33,7 +33,7 @@ function Home({
     <div className="min-h-screen bg-zinc-900">
       <div className="fixed top-0 left-0 right-0 flex justify-center items-center p-4 z-20">
         <div className="flex justify-between items-center w-full max-w-4xl mx-auto p-2 bg-white/20 backdrop-blur-md shadow-md rounded-full border border-white/30">
-          <div className="flex space-x-2 ml-2">
+          <div className="flex space-x-2 mr-2">
             <Link to="/wormhole">
               <Button variant="outline" className="rounded-full font-medium">
                 wormhole
@@ -60,7 +60,7 @@ function Home({
               <TooltipTrigger asChild>
                 <Button
                   variant="outline"
-                  className="rounded-full px-6 py-2 font-medium mr-2 flex items-center"
+                  className="rounded-full px-6 py-2 font-medium ml-2 flex items-center"
                   onClick={connectWalletDirectly}
                 >
                   {walletAddress ? (
