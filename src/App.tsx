@@ -155,7 +155,6 @@ function ZoraMintWrapper({ walletAddress }: { walletAddress: string }) {
 function AgentsDashboardWrapper() {
   return (
     <div className="min-h-screen">
-      <header className="p-4"></header>
       <AgentsDashboard />
     </div>
   );
