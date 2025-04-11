@@ -1,8 +1,9 @@
 from agent_runner.datum import Datum
 
 class CallingCtx:
-    def __init__(self, api_keys: dict[str, str]):
+    def __init__(self, api_keys: dict[str, str], input_text: str):
         self.api_keys = api_keys
+        self.input_text = input_text
 
     def key(self, key: str) -> str:
         """
@@ -31,7 +32,7 @@ def run(node: any, nodes: dict[int, any], context: CallingCtx) -> list[Datum]:
     # Execute the node
     return node.execute(inputs, context)
 
-def execute(nodes: dict[int, any], api_keys: dict[str, str], inputs: list[str]) -> list[str]:
+def execute(nodes: dict[int, any], api_keys: dict[str, str], text_input: str) -> list[str]:
     """
     Executes the pipeline with the given nodes and connections.
     """
@@ -40,7 +41,7 @@ def execute(nodes: dict[int, any], api_keys: dict[str, str], inputs: list[str]) 
     output_nodes = [node for node in nodes.values() if node.is_output()]
 
     # Create a context for API keys
-    context = CallingCtx(api_keys)
+    context = CallingCtx(api_keys, text_input)
 
     # Execute the nodes
     results = []

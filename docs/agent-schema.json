@@ -1,92 +1,105 @@
 {
-    "name": "My Agent",
-    "description": "This is a test agent",
-    "nodes": [
-      {
-        "id": "1744404741938",
-        "data": {
-          "label": "OpenAI Agent"
+  "name": "My Agent",
+  "description": "This is a test agent",
+  "nodes": [
+    {
+      "id": "1744410112969",
+      "data": {
+        "label": "OpenAI Agent",
+        "enableFunctions": true,
+        "function": {
+          "outputType": "nft",
+          "description": "This is a function"
         },
-        "position": {
-          "x": 272.1156738326954,
-          "y": 305.61442823858533
-        },
-        "type": "ai/openai",
-        "measured": {
-          "width": 227,
-          "height": 161
-        }
+        "systemPrompt": "This is a system prompt",
+        "model": "gpt-3.5-turbo"
       },
-      {
-        "id": "1744404743707",
-        "data": {
-          "label": "Text Output"
-        },
-        "position": {
-          "x": 113.86436929741389,
-          "y": 317.78711420997644
-        },
-        "type": "output/text",
-        "measured": {
-          "width": 57,
-          "height": 199
-        }
+      "position": {
+        "x": 77.16402523141869,
+        "y": -137.89577160666386
       },
-      {
-        "id": "1744404743966",
-        "data": {
-          "label": "Text Output"
-        },
-        "position": {
-          "x": 104.11573736036667,
-          "y": 146.69920914766934
-        },
-        "type": "output/text",
-        "measured": {
-          "width": 57,
-          "height": 199
-        }
+      "type": "ai/openai",
+      "measured": {
+        "width": 250,
+        "height": 448
       },
-      {
-        "id": "1744404744496",
-        "data": {
-          "label": "Text Output"
-        },
-        "position": {
-          "x": 208.44628474533465,
-          "y": 269.3652010013311
-        },
-        "type": "output/text",
-        "measured": {
-          "width": 57,
-          "height": 199
-        }
+      "selected": true,
+      "dragging": false
+    },
+    {
+      "id": "1744410131397",
+      "data": {
+        "label": "Text Input"
       },
-      {
-        "id": "1744404745065",
-        "data": {
-          "label": "OpenAI Agent"
-        },
-        "position": {
-          "x": 217.29199826259003,
-          "y": 442.45614867624545
-        },
-        "type": "ai/openai",
-        "measured": {
-          "width": 227,
-          "height": 161
-        },
-        "selected": true,
-        "dragging": false
-      }
-    ],
-    "edges": [
-      {
-        "source": "1744404745065",
-        "sourceHandle": "output",
-        "target": "1744404741938",
-        "targetHandle": "input",
-        "id": "xy-edge__1744404745065output-1744404741938input"
-      }
-    ]
-  }
+      "position": {
+        "x": -273.8760918391125,
+        "y": -19.917040154627607
+      },
+      "type": "input/text",
+      "measured": {
+        "width": 250,
+        "height": 84
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "1744410147600",
+      "data": {
+        "label": "NFT Output"
+      },
+      "position": {
+        "x": 544.7819831290287,
+        "y": 169.1590538711431
+      },
+      "type": "output/nft",
+      "measured": {
+        "width": 250,
+        "height": 84
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "1744410149015",
+      "data": {
+        "label": "Text Output"
+      },
+      "position": {
+        "x": 529.4314999247897,
+        "y": -51.33622709278757
+      },
+      "type": "output/text",
+      "measured": {
+        "width": 250,
+        "height": 84
+      },
+      "selected": false,
+      "dragging": false
+    }
+  ],
+  "edges": [
+    {
+      "source": "1744410131397",
+      "sourceHandle": "output/text",
+      "target": "1744410112969",
+      "targetHandle": "input/text",
+      "id": "xy-edge__1744410131397output/text-1744410112969input/text"
+    },
+    {
+      "source": "1744410112969",
+      "sourceHandle": "output/a",
+      "target": "1744410149015",
+      "targetHandle": "input/text",
+      "id": "xy-edge__1744410112969output/a-1744410149015input/text"
+    },
+    {
+      "source": "1744410112969",
+      "sourceHandle": "output/b",
+      "target": "1744410147600",
+      "targetHandle": "input/nft",
+      "id": "xy-edge__1744410112969output/b-1744410147600input/nft"
+    }
+  ],
+  "createdAt": "2025-04-11T22:26:19.198Z"
+}

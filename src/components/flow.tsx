@@ -60,6 +60,7 @@ export default function Flow({
       isValidConnection={isValidConnection}
       onLoad={onLoad}
       nodeTypes={nodeTypes}
+      colorMode='dark'
       fitView
     >
       <Background />

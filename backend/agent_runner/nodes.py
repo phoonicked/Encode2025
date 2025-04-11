@@ -55,11 +55,18 @@ class InputText(InputNode):
         """
         Returns the input text.
         """
-        return [StrDatum("Input Text")]
+        return [StrDatum(context.input_text)] if context.input_text else []
 
 class OutputText(OutputNode):
     def execute(self, inputs: list[Datum], context: CallingCtx) -> Datum:
         """
         Outputs the given text.
+        """
+        return [inputs[0]] if len(inputs) > 0 else []
+    
+class OutputNFT(OutputNode):
+    def execute(self, inputs: list[Datum], context: CallingCtx) -> Datum:
+        """
+        Outputs the given NFT.
         """
         return [inputs[0]] if len(inputs) > 0 else []

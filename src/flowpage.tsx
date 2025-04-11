@@ -139,6 +139,8 @@ export function FlowPage() {
       createdAt: new Date(),
     };
 
+    console.log(savedData);
+
     try {
       // Create a new document reference in the "agents" collection with an auto-generated ID
       const newAgentRef = doc(collection(db, "agents"));
@@ -205,7 +207,7 @@ export function FlowPage() {
         </div>
       </header>
 
-      <div className="flex flex-1 overflow-hidden bg-zinc-800 text-gray-300">
+      <div className="flex flex-1 overflow-hidden text-gray-300 bg-zinc-900">
         {/* Sidebar */}
         <aside className="w-[20%] p-4 space-y-4 bg-zinc-900">
           <Card className='bg-zinc-800'>

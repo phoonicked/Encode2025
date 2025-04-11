@@ -15,3 +15,7 @@
 .react-flow__handle[data-type="output/nft"] {
   background-color: #0000ff;
 }
+
+.react-flow {
+  border-radius: 16px;
+}

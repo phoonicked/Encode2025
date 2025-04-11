@@ -5,6 +5,7 @@ __switcher = {
     "ai/openai": OpenAI,
     "input/text": InputText,
     "output/text": OutputText,
+    "output/nft": OutputNFT,
 }
 
 def __create_node(node_info: NodeInfo):
