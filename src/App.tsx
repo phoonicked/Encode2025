@@ -1,57 +1,70 @@
-// src/App.tsx
 import { useState } from 'react';
 import { BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
-import './App.css';
 import WormholeScreen from './WormholeScreen';
 import { FlowPage } from './flowpage'; // Adjust path as needed
-import { Button } from "./components/ui/button";
 import ZoraMint from './ZoraMint';
+import { Button } from "./components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./components/ui/tooltip";
 
-// Home screen component with wallet connection and navigation buttons
+// Home screen component with navigation bar
 function Home({ walletAddress, connectWalletDirectly }: { walletAddress: string, connectWalletDirectly: () => void }) {
-
   const [count, setCount] = useState<number>(0);
 
   return (
-    <div className="App">
-      <header>
-        <div>
-          <a href="https://vite.dev" target="_blank" rel="noreferrer">
-            <img src={viteLogo} className="logo" alt="Vite logo" />
-          </a>
-          <a href="https://react.dev" target="_blank" rel="noreferrer">
-            <img src={reactLogo} className="logo react" alt="React logo" />
-          </a>
+    <div className="flex justify-center items-center min-h-screen">
+      <div className="flex justify-between items-center w-full max-w-4xl mx-auto p-2 border-2 border-black rounded-full">
+        <div className="flex space-x-2 ml-2">
+          <Link to="/wormhole">
+            <Button variant="outline" className="rounded-full font-medium">wormhole</Button>
+          </Link>
+          <Link to="/flowpage">
+            <Button variant="outline" className="rounded-full font-medium">flow</Button>
+          </Link>
+          <Link to="/mint">
+            <Button variant="outline" className="rounded-full font-medium">Linganguliguliguliwacha</Button>
+          </Link>
+          <Button variant="outline" className="rounded-full font-medium" onClick={() => setCount(count + 1)}>
+            count is {count}
+          </Button>
         </div>
-        <h1>Vite + React</h1>
-        <div className="space-x-2 mt-4">
-          {/* Navigation Buttons */}
-          <Button>
-            <Link to="/wormhole">Go to Wormhole Connect</Link>
-          </Button>
-          <Button>
-            <Link to="/flowpage">Go to Flow Page</Link>
-          </Button>
-          <Button>
-            <Link to="/mint">Linganguliguliguliwacha</Link>
-          </Button>
-          {/* Wallet Connection */}
-          {walletAddress ? (
-            <p>Connected Wallet: {walletAddress}</p>
-          ) : (
-            <Button onClick={connectWalletDirectly}>Connect Wallet Directly</Button>
-          )}
-        </div>
-      </header>
-      <div className="card mt-4">
-        <Button onClick={() => setCount(count + 1)}>count is {count}</Button>
-        <p>Edit <code>src/App.tsx</code> and save to test HMR.</p>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button 
+                variant="outline"
+                className="rounded-full px-6 py-2 font-medium mr-2 flex items-center" 
+                onClick={connectWalletDirectly}
+              >
+                {walletAddress ? (
+                  <div className="flex items-center">
+                    connected
+                    <div className="ml-2 relative">
+                      <span className="relative flex h-3 w-3">
+                        <span
+                          className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"
+                        ></span>
+                        <span
+                          className="relative inline-flex h-3 w-3 rounded-full bg-green-500"
+                        ></span>
+                      </span>
+                    </div>
+                  </div>
+                ) : 'connect wallet'}
+              </Button>
+            </TooltipTrigger>
+            {walletAddress && (
+              <TooltipContent>
+                <p>{walletAddress}</p>
+              </TooltipContent>
+            )}
+          </Tooltip>
+        </TooltipProvider>
       </div>
-      <p className="read-the-docs mt-4">
-        Click on the Vite and React logos to learn more.
-      </p>
     </div>
   );
 }
@@ -60,9 +73,9 @@ function Home({ walletAddress, connectWalletDirectly }: { walletAddress: string,
 function FlowPageWrapper() {
   const navigate = useNavigate();
   return (
-    <div className="App">
+    <div className="min-h-screen">
       <header className="p-4">
-        <Button onClick={() => navigate('/')}>Back</Button>
+        <Button variant="outline" className="rounded-full" onClick={() => navigate('/')}>Back</Button>
       </header>
       <FlowPage />
     </div>
@@ -73,26 +86,39 @@ function FlowPageWrapper() {
 function WormholeWrapper() {
   const navigate = useNavigate();
   return (
-    <div className="App">
+    <div className="min-h-screen">
       <header className="p-4">
-        <Button onClick={() => navigate('/')}>Back</Button>
+        <Button variant="outline" className="rounded-full" onClick={() => navigate('/')}>Back</Button>
       </header>
       <WormholeScreen />
     </div>
   );
 }
 
+// Wrapper for ZoraMint with a Back button
+function ZoraMintWrapper({ walletAddress }: { walletAddress: string }) {
+  const navigate = useNavigate();
+  return (
+    <div className="min-h-screen">
+      <header className="p-4">
+        <Button variant="outline" className="rounded-full" onClick={() => navigate('/')}>Back</Button>
+      </header>
+      <ZoraMint walletAddress={walletAddress} />
+    </div>
+  );
+}
+
 // Main App component with router configuration
 function App() {
-
   const [walletAddress, setWalletAddress] = useState<string>('');
+
   const connectWalletDirectly = async () => {
     try {
       if ((window as any).ethereum) {
         const accounts = await (window as any).ethereum.request({ method: 'eth_requestAccounts' });
         if (accounts && accounts.length > 0) {
           setWalletAddress(accounts[0]);
-          // console.log('Direct wallet connection successful:', accounts[0]);
+          console.log('Direct wallet connection successful:', accounts[0]);
         }
       } else {
         alert('No Ethereum wallet detected. Please install MetaMask or another supported wallet.');
@@ -105,10 +131,10 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home walletAddress={walletAddress} connectWalletDirectly={connectWalletDirectly}/>} />
+        <Route path="/" element={<Home walletAddress={walletAddress} connectWalletDirectly={connectWalletDirectly} />} />
         <Route path="/flowpage" element={<FlowPageWrapper />} />
         <Route path="/wormhole" element={<WormholeWrapper />} />
-        <Route path="/mint" element={<ZoraMint walletAddress={walletAddress} />} />
+        <Route path="/mint" element={<ZoraMintWrapper walletAddress={walletAddress} />} />
       </Routes>
     </BrowserRouter>
   );
