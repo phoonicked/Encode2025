@@ -12,7 +12,7 @@ export function FlowPage() {
   return (
     <div className="flex flex-col h-screen">
       {/* Top Bar */}
-      <header className="flex justify-between items-center p-4 border-b">
+      <header className="flex justify-between items-center p-4 border-b border-2">
         <h1 className="text-xl font-bold">React Flow Editor</h1>
         <div className="space-x-2">
           <Button variant="default">Save</Button>
@@ -41,7 +41,7 @@ export function FlowPage() {
         </aside>
 
         {/* Main React Flow Area */}
-        <main className="flex-1">
+        <main className="flex-1 border-2">
           <Flow />
         </main>
       </div>

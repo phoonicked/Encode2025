@@ -1,21 +1,20 @@
 // src/App.tsx
 import { useState } from 'react';
+import { BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
 import './App.css';
 import WormholeScreen from './WormholeScreen';
-import { FlowPage } from './flowpage'; // Adjust the path as needed
+import { FlowPage } from './flowpage'; // Adjust path as needed
 import { Button } from "./components/ui/button";
 
-function App() {
-  const [showWormhole, setShowWormhole] = useState<boolean>(false);
-  const [showFlowPage, setShowFlowPage] = useState<boolean>(false);
+// Home screen component with wallet connection and navigation buttons
+function Home() {
   const [walletAddress, setWalletAddress] = useState<string>('');
   const [count, setCount] = useState<number>(0);
 
   const connectWalletDirectly = async () => {
     try {
-      // Check if the Ethereum provider (e.g., MetaMask) is available
       if ((window as any).ethereum) {
         const accounts = await (window as any).ethereum.request({ method: 'eth_requestAccounts' });
         if (accounts && accounts.length > 0) {
@@ -30,31 +29,6 @@ function App() {
     }
   };
 
-  // If FlowPage is active, render it with a Back button
-  if (showFlowPage) {
-    return (
-      <div className="App">
-        <header>
-          <Button onClick={() => setShowFlowPage(false)}>Back</Button>
-        </header>
-        <FlowPage />
-      </div>
-    );
-  }
-  
-  // If WormholeScreen is active, render it with a Back button
-  if (showWormhole) {
-    return (
-      <div className="App">
-        <header>
-          <Button onClick={() => setShowWormhole(false)}>Back</Button>
-        </header>
-        <WormholeScreen />
-      </div>
-    );
-  }
-
-  // Main App content when no sub-page is active
   return (
     <div className="App">
       <header>
@@ -67,34 +41,69 @@ function App() {
           </a>
         </div>
         <h1>Vite + React</h1>
-        {/* Button to navigate to WormholeScreen */}
-        <Button onClick={() => setShowWormhole(true)}>
-          Go to Wormhole Connect
-        </Button>
-        {/* Button to navigate to FlowPage */}
-        <Button onClick={() => setShowFlowPage(true)}>
-          Go to Flow Page
-        </Button>
-        {walletAddress ? (
-          <p>Connected Wallet: {walletAddress}</p>
-        ) : (
-          <>
+        <div className="space-x-2 mt-4">
+          {/* Navigation Buttons */}
+          <Button>
+            <Link to="/wormhole">Go to Wormhole Connect</Link>
+          </Button>
+          <Button>
+            <Link to="/flowpage">Go to Flow Page</Link>
+          </Button>
+          {/* Wallet Connection */}
+          {walletAddress ? (
+            <p>Connected Wallet: {walletAddress}</p>
+          ) : (
             <Button onClick={connectWalletDirectly}>Connect Wallet Directly</Button>
-          </>
-        )}
+          )}
+        </div>
       </header>
-      <div className="card">
-        <Button onClick={() => setCount(count + 1)}>
-          count is {count}
-        </Button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR.
-        </p>
+      <div className="card mt-4">
+        <Button onClick={() => setCount(count + 1)}>count is {count}</Button>
+        <p>Edit <code>src/App.tsx</code> and save to test HMR.</p>
       </div>
-      <p className="read-the-docs">
+      <p className="read-the-docs mt-4">
         Click on the Vite and React logos to learn more.
       </p>
     </div>
+  );
+}
+
+// Wrapper for FlowPage with a Back button
+function FlowPageWrapper() {
+  const navigate = useNavigate();
+  return (
+    <div className="App">
+      <header className="p-4">
+        <Button onClick={() => navigate('/')}>Back</Button>
+      </header>
+      <FlowPage />
+    </div>
+  );
+}
+
+// Wrapper for WormholeScreen with a Back button
+function WormholeWrapper() {
+  const navigate = useNavigate();
+  return (
+    <div className="App">
+      <header className="p-4">
+        <Button onClick={() => navigate('/')}>Back</Button>
+      </header>
+      <WormholeScreen />
+    </div>
+  );
+}
+
+// Main App component with router configuration
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/flowpage" element={<FlowPageWrapper />} />
+        <Route path="/wormhole" element={<WormholeWrapper />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
