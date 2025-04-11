@@ -1,32 +1,24 @@
 import React, { useState } from 'react';
-import { create1155 } from "@zoralabs/protocol-sdk";
-import { createPublicClient, createWalletClient, custom, http } from "viem";
+import { createWalletClient, custom } from "viem";
 import { sepolia } from 'viem/chains';
+// Ensure ethers is imported correctly
+import { ethers } from 'ethers';
 
 interface Props {
   walletAddress: string;
 }
 
 const ZoraMint: React.FC<Props> = ({ walletAddress }) => {
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [minting, setMinting] = useState<boolean>(false);
-    const [contractAddress, setContractAddress] = useState<string>("");
-    const [tokenURI, setTokenURI] = useState<string>("");
-
-  // Configure the public client and wallet client for Base Sepolia.
-  const publicClient = createPublicClient({
-    chain: sepolia,
-    transport: http(),
-  });
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [minting, setMinting] = useState<boolean>(false);
 
   const walletClient = createWalletClient({
     chain: sepolia,
     transport: custom((window as any).ethereum),
   });
 
-   // Check and request network switch if needed.
-   const ensureCorrectNetwork = async () => {
-    // Get the current chain ID from the wallet.
+  // Ensure the wallet is on the correct network.
+  const ensureCorrectNetwork = async () => {
     const currentChainId = await walletClient.getChainId();
     if (currentChainId !== sepolia.id) {
       try {
@@ -61,18 +53,18 @@ const ZoraMint: React.FC<Props> = ({ walletAddress }) => {
             return true;
           } catch (addError) {
             console.error("Error adding/switching network:", addError);
-            alert("Failed to add Base Sepolia network to your wallet.");
+            alert("Failed to add Sepolia network.");
             return false;
           }
         } else {
           console.error("Chain switch error:", switchError);
-          alert("Please switch your wallet network to Sepolia.");
+          alert("Please switch to the Sepolia network.");
           return false;
         }
       }
     }
     return true;
-  };  
+  };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files?.[0]) {
@@ -87,13 +79,17 @@ const ZoraMint: React.FC<Props> = ({ walletAddress }) => {
     const res = await fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${import.meta.env.PINATA_JWT_KEY}`,
+        Authorization: `Bearer ${import.meta.env.VITE_PINATA_JWT_KEY}`,
       },
       body: formData,
     });
 
     const data = await res.json();
-    return `ipfs://${data.IpfsHash}`;
+    if (data && data.IpfsHash) {
+      return `ipfs://${data.IpfsHash}`;
+    } else {
+      throw new Error('IPFS upload failed');
+    }
   };
 
   const handleMint = async () => {
@@ -112,66 +108,45 @@ const ZoraMint: React.FC<Props> = ({ walletAddress }) => {
 
       // 1. Upload the file to IPFS and get the metadata URI.
       const uploadedURI = await uploadToIPFS(selectedFile);
-      setTokenURI(uploadedURI);
 
-      // 💾 Define your contract + token metadata
-  const contractMetadata = {
-    name: "Test Contract",
-    description: "A test 1155 contract created via the Zora protocol.",
-    image: `${uploadedURI}`,
-    external_link: "https://yourprojectsite.xyz",
-  };
+      const tokenMetadata = {
+        name: "My First Token",
+        description: "This is the first token in the collection.",
+        image: `${uploadedURI}`,
+        attributes: [
+          { trait_type: "Rarity", value: "Rare" },
+          { trait_type: "Level", value: 1 },
+        ],
+      };
 
-  const tokenMetadata = {
-    name: "My First Token",
-    description: "This is the first token in the collection.",
-    image: `${uploadedURI}`,
-    attributes: [
-      { trait_type: "Rarity", value: "Rare" },
-      { trait_type: "Level", value: 1 },
-    ],
-  };
+      // Convert JSON to File
+      const createJsonFile = (obj: any, filename: string): File => {
+        const blob = new Blob([JSON.stringify(obj)], { type: "application/json" });
+        return new File([blob], filename);
+      };
 
-  // Convert JSON to File
-const createJsonFile = (obj: any, filename: string): File => {
-    const blob = new Blob([JSON.stringify(obj)], { type: "application/json" });
-    return new File([blob], filename);
-  };
+      // 📤 Upload both metadata files
+      const tokenJsonFile = createJsonFile(tokenMetadata, "token.json");
 
-  // 📤 Upload both metadata files
-  const contractJsonFile = createJsonFile(contractMetadata, "contract.json");
-  const tokenJsonFile = createJsonFile(tokenMetadata, "token.json");
+      const tokenUri = await uploadToIPFS(tokenJsonFile);
 
-  const contractUri = await uploadToIPFS(contractJsonFile);
-  const tokenUri = await uploadToIPFS(tokenJsonFile);
+      console.log("✅ Uploaded token.json:", tokenUri);
 
-  console.log("✅ Uploaded contract.json:", contractUri);
-  console.log("✅ Uploaded token.json:", tokenUri);
+      // Contract details
+      const contractAddress = '0x4cbcb03f288f992bc49f8345868281a664c2b449';
+      const contractABI = [
+        "function mint(address to, string memory tokenURI) public returns (uint256)",
+      ];
 
+      // Ensure ethers is used correctly
+      const provider = new ethers.BrowserProvider(window.ethereum); // Updated for ethers v6
+      const signer = await provider.getSigner();
+      const contract = new ethers.Contract(contractAddress, contractABI, signer);
 
-      // 2. Prepare the 1155 NFT creation using Zora's create1155 function.
-      const { parameters, contractAddress } = await create1155({
-        contract: {
-          name: "My Zora NFT Collection",
-          uri: contractUri, // Contract metadata URI
-        },
-        token: {
-          tokenMetadataURI: tokenUri, // Token metadata URI
-        },
-        account: walletAddress,
-        publicClient,
-      });
-
-      
-      console.log("Contract Address:", contractAddress);
-      console.log("Parameters:", parameters);
-
-      // 3. Execute the transaction using the wallet client.
-      const tx = await walletClient.writeContract(parameters);
-      console.log("Transaction:", tx);
-      setContractAddress(contractAddress);
-
-      alert(`NFT successfully minted on contract: ${contractAddress}`);
+      const tx = await contract.mint(walletAddress, tokenUri);
+      const data = await tx.wait();
+      console.log('NFT minted successfully!');
+      console.log('Transaction data:', data);
     } catch (error) {
       console.error("Minting error:", error);
       alert("Minting failed.");
@@ -189,20 +164,6 @@ const createJsonFile = (obj: any, filename: string): File => {
       <button onClick={handleMint} disabled={!selectedFile || minting || !walletAddress}>
         {minting ? "Minting..." : "Mint NFT"}
       </button>
-
-      {tokenURI && (
-        <p>
-          NFT Metadata URI:{" "}
-          <a
-            href={`https://ipfs.io/ipfs/${tokenURI.split("//")[1]}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {tokenURI}
-          </a>
-        </p>
-      )}
-      {contractAddress && <p>Deployed Contract Address: {contractAddress}</p>}
     </div>
   );
 };
