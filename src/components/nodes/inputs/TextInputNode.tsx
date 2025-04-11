@@ -5,7 +5,7 @@ import { Input } from '../../ui/input';
 export default function TextInputNode() {
   return (
     <>
-      <Handle type="source" position={Position.Bottom} id="output" />
+      <Handle type="source" position={Position.Right} id="output" />
       <Card>
         <CardHeader>
           <CardTitle>Text Input</CardTitle>

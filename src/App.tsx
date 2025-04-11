@@ -17,6 +17,7 @@ import {
   TooltipTrigger,
 } from "./components/ui/tooltip";
 import AgentsDashboard from "./Dashboard";
+import { ReactFlowProvider } from "@xyflow/react";
 
 // Home screen component with navigation bar
 function Home({
@@ -109,7 +110,9 @@ function FlowPageWrapper() {
           Back
         </Button>
       </header>
-      <FlowPage />
+      <ReactFlowProvider>
+        <FlowPage />
+      </ReactFlowProvider>
     </div>
   );
 }

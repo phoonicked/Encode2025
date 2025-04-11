@@ -1,0 +1,15 @@
+.react-flow__handle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid #000;
+}
+
+.react-flow__handle[data-handleid="input"] {
+    background-color: #f00;
+}
+
+.react-flow__handle[data-handleid="output"] {
+    background-color: #0f0;
+}

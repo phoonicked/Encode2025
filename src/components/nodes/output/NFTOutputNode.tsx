@@ -5,7 +5,7 @@ import { Input } from '../../ui/input';
 export default function NFTOutputNode() {
   return (
     <>
-      <Handle type="target" position={Position.Top} id="input" />
+      <Handle type="target" position={Position.Left} id="input" />
       <Card>
         <CardHeader>
           <CardTitle>NFT Output</CardTitle>
