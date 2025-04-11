@@ -1,5 +1,6 @@
 from agent_runner.concretizer.parser import parse_agent
 from agent_runner.concretizer.resolver import agent_resolve
+from agent_runner.executor import execute
 
 def main():
     # Read /home/cy4/p/js/Encode2025/docs/agent-schema.json as string:
@@ -7,7 +8,8 @@ def main():
         agent_schema = f.read()
         info = parse_agent(agent_schema)
         nodes = agent_resolve(info)
-        
-        for node in nodes.values():
-            print(node)
-            print(node.requires_keys())
+        print(nodes)
+        results = execute(nodes, {"OPENAI_API_KEY": "poop"}, [])
+        print("Execution Results:")
+        for result in results:
+            print(result)
