@@ -1,4 +1,3 @@
-// src/components/Flow.tsx
 import React, { useMemo } from 'react';
 import {
   ReactFlow,
@@ -17,9 +16,7 @@ import '@xyflow/react/dist/style.css';
 import TextInputNode from './nodes/inputs/TextInputNode';
 import TextOutputNode from './nodes/output/TextOutputNode';
 import NFTOutputNode from './nodes/output/NFTOutputNode';
-
 import "./flow.css";
-
 
 interface FlowProps {
   nodes: Node[];
@@ -42,21 +39,15 @@ export default function Flow({
   isValidConnection,
   onLoad,
 }: FlowProps) {
-  // Map the available node types to components.
   const nodeTypes = useMemo(
     () => ({
       'ai/openai': OpenAINode,
-  
-      // Input nodes
       'input/text': TextInputNode,
-      // Output nodes
       'output/text': TextOutputNode,
       'output/nft': NFTOutputNode,
     }),
     []
   );
-  
-  
 
   return (
     <ReactFlow

@@ -4,12 +4,18 @@
     height: 10px;
     border-radius: 50%;
     border: 2px solid #000;
-}
-
-.react-flow__handle[data-handleid="input"] {
-    background-color: #f00;
-}
-
-.react-flow__handle[data-handleid="output"] {
-    background-color: #0f0;
-}
+  }
+  
+  .react-flow__handle[data-nodetype="input/text"],
+  .react-flow__handle[data-nodetype="output/text"] {
+    background-color: #00ff00; /* Both text input and output use green, for example */
+  }
+  
+  .react-flow__handle[data-nodetype="output/nft"] {
+    background-color: #0000ff; /* Blue for NFT nodes */
+  }
+  
+  .react-flow__handle[data-nodetype="ai/openai"] {
+    background-color: #ff00ff; /* Magenta for AI nodes */
+  }
+  
