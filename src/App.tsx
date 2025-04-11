@@ -1,8 +1,14 @@
-import { useState } from 'react';
-import { BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom';
-import WormholeScreen from './WormholeScreen';
-import { FlowPage } from './flowpage'; // Adjust path as needed
-import ZoraMint from './ZoraMint';
+import { useState } from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Link,
+  useNavigate,
+} from "react-router-dom";
+import WormholeScreen from "./WormholeScreen";
+import { FlowPage } from "./flowpage"; // Adjust path as needed
+import ZoraMint from "./ZoraMint";
 import { Button } from "./components/ui/button";
 import {
   Tooltip,
@@ -10,9 +16,16 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./components/ui/tooltip";
+import AgentsDashboard from "./Dashboard";
 
 // Home screen component with navigation bar
-function Home({ walletAddress, connectWalletDirectly }: { walletAddress: string, connectWalletDirectly: () => void }) {
+function Home({
+  walletAddress,
+  connectWalletDirectly,
+}: {
+  walletAddress: string;
+  connectWalletDirectly: () => void;
+}) {
   const [count, setCount] = useState<number>(0);
 
   return (
@@ -20,24 +33,39 @@ function Home({ walletAddress, connectWalletDirectly }: { walletAddress: string,
       <div className="flex justify-between items-center w-full max-w-4xl mx-auto p-2 border-2 border-black rounded-full">
         <div className="flex space-x-2 ml-2">
           <Link to="/wormhole">
-            <Button variant="outline" className="rounded-full font-medium">wormhole</Button>
+            <Button variant="outline" className="rounded-full font-medium">
+              wormhole
+            </Button>
           </Link>
           <Link to="/flowpage">
-            <Button variant="outline" className="rounded-full font-medium">flow</Button>
+            <Button variant="outline" className="rounded-full font-medium">
+              flow
+            </Button>
           </Link>
           <Link to="/mint">
-            <Button variant="outline" className="rounded-full font-medium">Linganguliguliguliwacha</Button>
+            <Button variant="outline" className="rounded-full font-medium">
+              Linganguliguliguliwacha
+            </Button>
           </Link>
-          <Button variant="outline" className="rounded-full font-medium" onClick={() => setCount(count + 1)}>
+          <Link to="/Agents">
+            <Button variant="outline" className="rounded-full font-medium">
+              Dashboard
+            </Button>
+          </Link>
+          <Button
+            variant="outline"
+            className="rounded-full font-medium"
+            onClick={() => setCount(count + 1)}
+          >
             count is {count}
           </Button>
         </div>
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button 
+              <Button
                 variant="outline"
-                className="rounded-full px-6 py-2 font-medium mr-2 flex items-center" 
+                className="rounded-full px-6 py-2 font-medium mr-2 flex items-center"
                 onClick={connectWalletDirectly}
               >
                 {walletAddress ? (
@@ -45,16 +73,14 @@ function Home({ walletAddress, connectWalletDirectly }: { walletAddress: string,
                     connected
                     <div className="ml-2 relative">
                       <span className="relative flex h-3 w-3">
-                        <span
-                          className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"
-                        ></span>
-                        <span
-                          className="relative inline-flex h-3 w-3 rounded-full bg-green-500"
-                        ></span>
+                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"></span>
+                        <span className="relative inline-flex h-3 w-3 rounded-full bg-green-500"></span>
                       </span>
                     </div>
                   </div>
-                ) : 'connect wallet'}
+                ) : (
+                  "connect wallet"
+                )}
               </Button>
             </TooltipTrigger>
             {walletAddress && (
@@ -75,7 +101,13 @@ function FlowPageWrapper() {
   return (
     <div className="min-h-screen">
       <header className="p-4">
-        <Button variant="outline" className="rounded-full" onClick={() => navigate('/')}>Back</Button>
+        <Button
+          variant="outline"
+          className="rounded-full"
+          onClick={() => navigate("/")}
+        >
+          Back
+        </Button>
       </header>
       <FlowPage />
     </div>
@@ -88,7 +120,13 @@ function WormholeWrapper() {
   return (
     <div className="min-h-screen">
       <header className="p-4">
-        <Button variant="outline" className="rounded-full" onClick={() => navigate('/')}>Back</Button>
+        <Button
+          variant="outline"
+          className="rounded-full"
+          onClick={() => navigate("/")}
+        >
+          Back
+        </Button>
       </header>
       <WormholeScreen />
     </div>
@@ -101,40 +139,71 @@ function ZoraMintWrapper({ walletAddress }: { walletAddress: string }) {
   return (
     <div className="min-h-screen">
       <header className="p-4">
-        <Button variant="outline" className="rounded-full" onClick={() => navigate('/')}>Back</Button>
+        <Button
+          variant="outline"
+          className="rounded-full"
+          onClick={() => navigate("/")}
+        >
+          Back
+        </Button>
       </header>
       <ZoraMint walletAddress={walletAddress} />
     </div>
   );
 }
 
+function AgentsDashboardWrapper() {
+  return (
+    <div className="min-h-screen">
+      <header className="p-4"></header>
+      <AgentsDashboard />
+    </div>
+  );
+}
+
 // Main App component with router configuration
 function App() {
-  const [walletAddress, setWalletAddress] = useState<string>('');
+  const [walletAddress, setWalletAddress] = useState<string>("");
 
   const connectWalletDirectly = async () => {
     try {
       if ((window as any).ethereum) {
-        const accounts = await (window as any).ethereum.request({ method: 'eth_requestAccounts' });
+        const accounts = await (window as any).ethereum.request({
+          method: "eth_requestAccounts",
+        });
         if (accounts && accounts.length > 0) {
           setWalletAddress(accounts[0]);
-          console.log('Direct wallet connection successful:', accounts[0]);
+          console.log("Direct wallet connection successful:", accounts[0]);
         }
       } else {
-        alert('No Ethereum wallet detected. Please install MetaMask or another supported wallet.');
+        alert(
+          "No Ethereum wallet detected. Please install MetaMask or another supported wallet."
+        );
       }
     } catch (error) {
-      console.error('Error connecting wallet directly:', error);
+      console.error("Error connecting wallet directly:", error);
     }
   };
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home walletAddress={walletAddress} connectWalletDirectly={connectWalletDirectly} />} />
+        <Route
+          path="/"
+          element={
+            <Home
+              walletAddress={walletAddress}
+              connectWalletDirectly={connectWalletDirectly}
+            />
+          }
+        />
         <Route path="/flowpage" element={<FlowPageWrapper />} />
         <Route path="/wormhole" element={<WormholeWrapper />} />
-        <Route path="/mint" element={<ZoraMintWrapper walletAddress={walletAddress} />} />
+        <Route
+          path="/mint"
+          element={<ZoraMintWrapper walletAddress={walletAddress} />}
+        />
+        <Route path="/agents" element={<AgentsDashboardWrapper />} />
       </Routes>
     </BrowserRouter>
   );
