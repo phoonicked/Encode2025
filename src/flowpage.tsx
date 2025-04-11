@@ -165,10 +165,10 @@ export function FlowPage() {
   return (
     <div className="flex flex-col h-screen">
       {/* Top Bar */}
-      <header className="flex justify-between items-center p-4 border-b border-2">
-        <h1 className="text-xl font-bold">Agent Flow Editor</h1>
+      <header className="flex justify-between items-center p-4 bg-zinc-900">
+        <h1 className="text-xl font-bold text-purple-300">Agent Flow Editor</h1>
         <div className="space-x-2">
-          <Button variant="default" onClick={() => {
+          <Button className="bg-purple-300 text-black" variant="default" onClick={() => {
             const saved = {
               name: "My Agent",
               description: "This is a test agent",
@@ -178,20 +178,20 @@ export function FlowPage() {
             console.log(saved);
             
           }}>Save</Button>
-          <Button variant="ghost">Help</Button>
+          <Button className='bg-purple-300' variant="ghost">Help</Button>
         </div>
       </header>
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden bg-zinc-800 text-gray-300">
         {/* Sidebar */}
-        <aside className="w-[20%] p-4 border-r space-y-4">
-          <Card>
-            <CardHeader className="text-left">
+        <aside className="w-[20%] p-4 space-y-4 bg-zinc-900">
+          <Card className='bg-zinc-800'>
+            <CardHeader className="text-left text-purple-300">
               <CardTitle>Components</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="text-left text-purple-300">
               <Input
-                className="w-full mb-2"
+                className="w-full mb-2 bg-white text-black"
                 placeholder="Search nodes..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -201,7 +201,7 @@ export function FlowPage() {
                   {filteredNodes.map((nodeOption) => (
                     <li key={nodeOption.label}>
                       <Button
-                        className="w-[80%] text-left"
+                        className="w-[80%] text-left bg-purple-300 text-black"
                         variant="outline"
                         onClick={() => handleAddNode(nodeOption)}
                       >
@@ -215,7 +215,7 @@ export function FlowPage() {
           </Card>
         </aside>
         {/* Main React Flow Area */}
-        <main className="flex-1 border-2">
+        <main className="flex-1">
           <Flow
             nodes={nodes}
             edges={edges}
