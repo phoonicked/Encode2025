@@ -16,13 +16,13 @@ import {
   Background,
   Controls,
 } from '@xyflow/react';
-import GenericNode from './nodes/GenericNode';
 
 import '@xyflow/react/dist/style.css';
+import OpenAINode from './nodes/ai/OpenAINode';
  
 const initialNodes: Node[] = [
-  { id: '1', data: { value: 'Node 1' }, position: { x: 5, y: 5 }, type: 'generic' },
-  { id: '2', data: { value: 'Node 2' }, position: { x: 5, y: 100 }, type: 'generic' },
+  { id: '1', data: { value: 'Node 1' }, position: { x: 5, y: 5 }, type: 'ai/openai' },
+  { id: '2', data: { value: 'Node 2' }, position: { x: 5, y: 100 }, type: 'ai/openai' },
 ];
  
 const initialEdges: Edge[] = [{ id: 'e1-2', source: '1', target: '2' }];
@@ -32,7 +32,6 @@ const fitViewOptions: FitViewOptions = {
 };
  
 const defaultEdgeOptions: DefaultEdgeOptions = {
-  animated: true,
 };
  
 const onNodeDrag: OnNodeDrag = (_, node) => {
@@ -59,7 +58,7 @@ export default function Flow() {
   );
 
   const nodeTypes = useMemo(() => ({
-    "generic": GenericNode
+    "ai/openai": OpenAINode
   }), []);
  
   return (
