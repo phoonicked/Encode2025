@@ -1,17 +1,16 @@
-// src/App.tsx
-
 import { useState } from 'react';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
 import './App.css';
 import WormholeScreen from './WormholeScreen';
+import ZoraMint from './ZoraMint';
 import { Button } from "@/components/ui/button"
 
 function App() {
+  const [showZora, setShowZora] = useState<boolean>(false);
   const [showWormhole, setShowWormhole] = useState<boolean>(false);
   const [walletAddress, setWalletAddress] = useState<string>('');
   const [count, setCount] = useState<number>(0);
-
   const connectWalletDirectly = async () => {
     try {
       // Check if the Ethereum provider (e.g., MetaMask) is available
@@ -19,7 +18,7 @@ function App() {
         const accounts = await (window as any).ethereum.request({ method: 'eth_requestAccounts' });
         if (accounts && accounts.length > 0) {
           setWalletAddress(accounts[0]);
-          console.log('Direct wallet connection successful:', accounts[0]);
+          // console.log('Direct wallet connection successful:', accounts[0]);
         }
       } else {
         alert('No Ethereum wallet detected. Please install MetaMask or another supported wallet.');
@@ -41,6 +40,17 @@ function App() {
     );
   }
 
+  if(showZora) {
+    return (
+      <div className="App">
+    <header>
+      <Button onClick={() => setShowZora(false)}>Back</Button>
+    </header>
+    <ZoraMint walletAddress={walletAddress} />
+  </div>
+    )
+  }
+
   return (
     <div className="App">
       <header>
@@ -55,6 +65,9 @@ function App() {
         <h1>Vite + React</h1>
         <Button onClick={() => setShowWormhole(true)}>
           Go to Wormhole Connect
+        </Button>
+        <Button onClick={() => setShowZora(true)}>
+          Mint with Zora
         </Button>
         {walletAddress ? (
             <p>Connected Wallet: {walletAddress}</p>
