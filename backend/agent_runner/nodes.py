@@ -62,4 +62,4 @@ class OutputText(OutputNode):
         """
         Outputs the given text.
         """
-        return [inputs[0]]
+        return [inputs[0]] if len(inputs) > 0 else []

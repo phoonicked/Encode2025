@@ -145,6 +145,7 @@ export function FlowPage() {
               nodes,
               edges
             }
+            console.log(saved);
             
           }}>Save</Button>
           <Button variant="ghost">Help</Button>
