@@ -1,8 +1,7 @@
 // src/components/nodes/NFTOutputNode.tsx
 import React from 'react';
 import { Handle, Position } from '@xyflow/react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { NFTOutputNodeData } from '@/types';
 
 interface NFTOutputNodeProps {
@@ -19,14 +18,6 @@ export default function NFTOutputNode({ data }: NFTOutputNodeProps) {
           <CardTitle>NFT Output</CardTitle>
           <CardDescription>Output an NFT.</CardDescription>
         </CardHeader>
-        <CardContent>
-          <Input
-            placeholder="Contract address"
-            className="mb-2"
-            value={data.contractAddress}
-            readOnly
-          />
-        </CardContent>
       </Card>
     </div>
   );

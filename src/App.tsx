@@ -34,26 +34,18 @@ function Home({
       <div className="fixed top-0 left-0 right-0 flex justify-center items-center p-4 z-20">
         <div className="flex justify-between items-center w-full max-w-4xl mx-auto p-2 bg-white/20 backdrop-blur-md shadow-md rounded-full border border-white/30">
           <div className="flex space-x-2 mr-2">
-            <Link to="/wormhole">
-              <Button variant="outline" className="rounded-full font-medium">
-                wormhole
-              </Button>
-            </Link>
-            <Link to="/flowpage">
-              <Button variant="outline" className="rounded-full font-medium">
-                flow
-              </Button>
-            </Link>
-            <Link to="/mint">
-              <Button variant="outline" className="rounded-full font-medium">
-                Linganguliguliguliwacha
-              </Button>
-            </Link>
-            <Link to="/agents">
-              <Button variant="outline" className="rounded-full font-medium">
-                Dashboard
-              </Button>
-            </Link>
+            <Button asChild variant="outline" className="rounded-full font-medium">
+              <Link to="/wormhole">wormhole</Link>
+            </Button>
+            <Button asChild variant="outline" className="rounded-full font-medium">
+              <Link to="/flowpage">flow</Link>
+            </Button>
+            <Button asChild variant="outline" className="rounded-full font-medium">
+              <Link to="/mint">Linganguliguliguliwacha</Link>
+            </Button>
+            <Button asChild variant="outline" className="rounded-full font-medium">
+              <Link to="/agents">Dashboard</Link>
+            </Button>
           </div>
           <TooltipProvider>
             <Tooltip>
