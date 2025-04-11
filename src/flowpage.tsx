@@ -5,7 +5,9 @@ import Flow from './components/flow'; // Your stateless Flow component
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
+import { collection, setDoc, doc } from 'firebase/firestore';
+import { db } from './firebaseConfig';
+
 import {
   addEdge,
   applyNodeChanges,
@@ -80,7 +82,7 @@ export function FlowPage() {
       const hasCycle = (node: Node, visited = new Set<string>()): boolean => {
         if (visited.has(node.id)) return false;
         visited.add(node.id);
-  
+ 
         for (const outgoer of getOutgoers(node, currentNodes, currentEdges)) {
           // if the outgoer is the source of the new connection, it forms a cycle
           if (outgoer.id === connection.source) return true;
@@ -114,8 +116,29 @@ export function FlowPage() {
       },
       type: option.type,
     };
-  
+
     setNodes((nds) => [...nds, newNode]);
+  };
+
+  const handleSaveData = async () => {
+    // Create your agent data object
+    const savedData = {
+      name: "My Agent",
+      description: "This is a test agent",
+      nodes,
+      edges,
+      createdAt: new Date(),
+    };
+
+    try {
+      // Create a new document reference in the "agents" collection with an auto-generated ID
+      const newAgentRef = doc(collection(db, "agents"));
+      // Save the data to the new document
+      await setDoc(newAgentRef, savedData);
+      console.log("Agent saved successfully with ID:", newAgentRef.id);
+    } catch (error) {
+      console.error("Error saving agent data:", error);
+    }
   };
 
   // Handler to log nodes and edges
@@ -168,16 +191,7 @@ export function FlowPage() {
       <header className="flex justify-between items-center p-4 border-b border-2">
         <h1 className="text-xl font-bold">Agent Flow Editor</h1>
         <div className="space-x-2">
-          <Button variant="default" onClick={() => {
-            const saved = {
-              name: "My Agent",
-              description: "This is a test agent",
-              nodes,
-              edges
-            }
-            console.log(saved);
-            
-          }}>Save</Button>
+          <Button variant="default" onClick={handleSaveData}>Save</Button>
           <Button variant="ghost">Help</Button>
         </div>
       </header>
