@@ -18,6 +18,7 @@ import {
 } from "./components/ui/tooltip";
 import AgentsDashboard from "./Dashboard";
 import { ReactFlowProvider } from "@xyflow/react";
+import DeformCanvas from "./components/DeformCanvas";
 
 // Home screen component with navigation bar
 function Home({
@@ -30,7 +31,9 @@ function Home({
   const [count, setCount] = useState<number>(0);
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
+    <div className="flex justify-center items-center min-h-screen bg-purple-800">
+
+      <DeformCanvas />
       <div className="flex justify-between items-center w-full max-w-4xl mx-auto p-2 border-2 border-black rounded-full">
         <div className="flex space-x-2 ml-2">
           <Link to="/wormhole">
