@@ -8,10 +8,10 @@
         "label": "OpenAI Agent",
         "enableFunctions": true,
         "function": {
-          "outputType": "nft",
-          "description": "This is a function"
+          "outputType": "text",
+          "description": "Create an NFT with the provided text."
         },
-        "systemPrompt": "This is a system prompt",
+        "systemPrompt": "You are an AI that creates NFTs based on user input",
         "model": "gpt-3.5-turbo"
       },
       "position": {
@@ -36,23 +36,6 @@
         "y": -19.917040154627607
       },
       "type": "input/text",
-      "measured": {
-        "width": 250,
-        "height": 84
-      },
-      "selected": false,
-      "dragging": false
-    },
-    {
-      "id": "1744410147600",
-      "data": {
-        "label": "NFT Output"
-      },
-      "position": {
-        "x": 544.7819831290287,
-        "y": 169.1590538711431
-      },
-      "type": "output/nft",
       "measured": {
         "width": 250,
         "height": 84
@@ -92,13 +75,6 @@
       "target": "1744410149015",
       "targetHandle": "input/text",
       "id": "xy-edge__1744410112969output/a-1744410149015input/text"
-    },
-    {
-      "source": "1744410112969",
-      "sourceHandle": "output/b",
-      "target": "1744410147600",
-      "targetHandle": "input/nft",
-      "id": "xy-edge__1744410112969output/b-1744410147600input/nft"
     }
   ],
   "createdAt": "2025-04-11T22:26:19.198Z"

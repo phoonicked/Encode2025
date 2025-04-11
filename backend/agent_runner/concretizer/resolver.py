@@ -2,7 +2,7 @@ from agent_runner.concretizer.parser import *
 from agent_runner.nodes import *
 
 __switcher = {
-    "ai/openai": OpenAI,
+    "ai/openai": OpenAINode,
     "input/text": InputText,
     "output/text": OutputText,
     "output/nft": OutputNFT,
@@ -14,7 +14,7 @@ def __create_node(node_info: NodeInfo):
     """
     node = __switcher.get(node_info.node_type)
     if node:
-        return node(node_info.node_id)
+        return node(node_info.node_id, node_info.options)
     else:
         raise ValueError(f"Unknown node type: {node_info.node_type}")
 
