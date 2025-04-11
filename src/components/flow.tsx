@@ -1,66 +1,45 @@
 // src/components/Flow.tsx
-import { useState, useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import {
   ReactFlow,
-  addEdge,
-  applyNodeChanges,
-  applyEdgeChanges,
-  type Node,
-  type Edge,
-  type FitViewOptions,
-  type OnConnect,
-  type OnNodesChange,
-  type OnEdgesChange,
-  type OnNodeDrag,
-  type DefaultEdgeOptions,
   Background,
   Controls,
+  type Node,
+  type Edge,
+  type OnNodesChange,
+  type OnEdgesChange,
+  type OnConnect,
 } from '@xyflow/react';
-
-import '@xyflow/react/dist/style.css';
+import GenericNode from './nodes/GenericNode';
 import OpenAINode from './nodes/ai/OpenAINode';
- 
-const initialNodes: Node[] = [
-  { id: '1', data: { value: 'Node 1' }, position: { x: 5, y: 5 }, type: 'ai/openai' },
-  { id: '2', data: { value: 'Node 2' }, position: { x: 5, y: 100 }, type: 'ai/openai' },
-];
- 
-const initialEdges: Edge[] = [{ id: 'e1-2', source: '1', target: '2' }];
- 
-const fitViewOptions: FitViewOptions = {
-  padding: 0.2,
-};
- 
-const defaultEdgeOptions: DefaultEdgeOptions = {
-};
- 
-const onNodeDrag: OnNodeDrag = (_, node) => {
-  console.log('drag event', node.data);
-};
- 
-export default function Flow() {
-  const [nodes, setNodes] = useState<Node[]>(initialNodes);
-  const [edges, setEdges] = useState<Edge[]>(initialEdges);
- 
-  const onNodesChange: OnNodesChange = useCallback(
-    (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
-    []
-  );
-  
-  const onEdgesChange: OnEdgesChange = useCallback(
-    (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
-    []
-  );
-  
-  const onConnect: OnConnect = useCallback(
-    (connection) => setEdges((eds) => addEdge(connection, eds)),
+import '@xyflow/react/dist/style.css';
+
+interface FlowProps {
+  nodes: Node[];
+  edges: Edge[];
+  onNodesChange: OnNodesChange;
+  onEdgesChange: OnEdgesChange;
+  onConnect: OnConnect;
+  onLoad?: (instance: any) => void;
+}
+
+export default function Flow({
+  nodes,
+  edges,
+  onNodesChange,
+  onEdgesChange,
+  onConnect,
+  onLoad,
+}: FlowProps) {
+  // Map the available node types to components.
+  const nodeTypes = useMemo(
+    () => ({
+      generic: GenericNode,
+      'ai/openai': OpenAINode,
+    }),
     []
   );
 
-  const nodeTypes = useMemo(() => ({
-    "ai/openai": OpenAINode
-  }), []);
- 
   return (
     <ReactFlow
       nodes={nodes}
@@ -68,11 +47,9 @@ export default function Flow() {
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
-      onNodeDrag={onNodeDrag}
-      fitView
-      fitViewOptions={fitViewOptions}
-      defaultEdgeOptions={defaultEdgeOptions}
+      onLoad={onLoad}
       nodeTypes={nodeTypes}
+      fitView
     >
       <Background />
       <Controls />
