@@ -1,10 +1,24 @@
-import { useRef, useEffect } from "react";
-
-import useResize from "./../hooks/useResize.ts";
+import { useRef, useEffect, useState } from "react";
 
 export default function DeformCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const dimensions = useResize();
+  const [dimensions, setDimensions] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight
+  });
+
+  // Handle window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -25,18 +39,22 @@ export default function DeformCanvas() {
     let mouseX = 0;
     let mouseY = 0;
 
-    canvas.addEventListener("mousemove", (e) => {
+    // Use document-level mouse tracking instead of canvas-specific
+    const handleMouseMove = (e: MouseEvent) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
-    });
+    };
+
+    document.addEventListener("mousemove", handleMouseMove);
 
     function draw() {
+      // These non-null assertions are safe because we've checked both canvas and ctx above
       const range = 100;
       const intensity = 5;
-      ctx!!.clearRect(0, 0, canvas!!.width, canvas!!.height);
+      ctx!.clearRect(0, 0, canvas!.width, canvas!.height);
 
-      for (let x = 0; x < canvas!!.width; x += 20) {
-        for (let y = 0; y < canvas!!.height; y += 20) {
+      for (let x = 0; x < canvas!.width; x += 20) {
+        for (let y = 0; y < canvas!.height; y += 20) {
           const dx = mouseX - x;
           const dy = mouseY - y;
           const distance = Math.sqrt(dx * dx + dy * dy);
@@ -44,16 +62,16 @@ export default function DeformCanvas() {
           const angle = Math.atan2(dy, dx);
           const move = -falloff * intensity;
 
-          ctx!!.beginPath();
-          ctx!!.arc(
+          ctx!.beginPath();
+          ctx!.arc(
             x + Math.cos(angle) * move,
             y + Math.sin(angle) * move,
             falloff ** 0.3 * 4,
             0,
             Math.PI * 2
           );
-          ctx!!.fillStyle = `rgba(255, 255, 255, ${0.5 * falloff ** 2})`;
-          ctx!!.fill();
+          ctx!.fillStyle = `rgba(255, 255, 255, ${0.5 * falloff ** 2})`;
+          ctx!.fill();
         }
       }
       requestAnimationFrame(draw);
@@ -62,9 +80,9 @@ export default function DeformCanvas() {
     draw();
 
     return () => {
-      canvas.removeEventListener("mousemove", () => {});
+      document.removeEventListener("mousemove", handleMouseMove);
     };
   }, [dimensions]);
 
-  return <canvas className="bg" ref={canvasRef} />;
+  return <canvas className="absolute inset-0 w-full h-full bg" ref={canvasRef} />;
 }

@@ -28,65 +28,68 @@ function Home({
   walletAddress: string;
   connectWalletDirectly: () => void;
 }) {
-  const [count, setCount] = useState<number>(0);
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-purple-800">
-
-      <DeformCanvas />
-      <div className="flex justify-between items-center w-full max-w-4xl mx-auto p-2 border-2 border-black rounded-full">
-        <div className="flex space-x-2 ml-2">
-          <Link to="/wormhole">
-            <Button variant="outline" className="rounded-full font-medium">
-              wormhole
-            </Button>
-          </Link>
-          <Link to="/flowpage">
-            <Button variant="outline" className="rounded-full font-medium">
-              flow
-            </Button>
-          </Link>
-          <Link to="/mint">
-            <Button variant="outline" className="rounded-full font-medium">
-              Linganguliguliguliwacha
-            </Button>
-          </Link>
-          <Link to="/agents">
-            <Button variant="outline" className="rounded-full font-medium">
-              Dashboard
-            </Button>
-          </Link>
-        </div>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="outline"
-                className="rounded-full px-6 py-2 font-medium mr-2 flex items-center"
-                onClick={connectWalletDirectly}
-              >
-                {walletAddress ? (
-                  <div className="flex items-center">
-                    connected
-                    <div className="ml-2 relative">
-                      <span className="relative flex h-3 w-3">
-                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"></span>
-                        <span className="relative inline-flex h-3 w-3 rounded-full bg-green-500"></span>
-                      </span>
-                    </div>
-                  </div>
-                ) : (
-                  "connect wallet"
-                )}
+    <div className="min-h-screen bg-zinc-900">
+      <div className="fixed top-0 left-0 right-0 flex justify-center items-center p-4 z-20">
+        <div className="flex justify-between items-center w-full max-w-4xl mx-auto p-2 bg-white/20 backdrop-blur-md shadow-md rounded-full border border-white/30">
+          <div className="flex space-x-2 ml-2">
+            <Link to="/wormhole">
+              <Button variant="outline" className="rounded-full font-medium">
+                wormhole
               </Button>
-            </TooltipTrigger>
-            {walletAddress && (
-              <TooltipContent>
-                <p>{walletAddress}</p>
-              </TooltipContent>
-            )}
-          </Tooltip>
-        </TooltipProvider>
+            </Link>
+            <Link to="/flowpage">
+              <Button variant="outline" className="rounded-full font-medium">
+                flow
+              </Button>
+            </Link>
+            <Link to="/mint">
+              <Button variant="outline" className="rounded-full font-medium">
+                Linganguliguliguliwacha
+              </Button>
+            </Link>
+            <Link to="/agents">
+              <Button variant="outline" className="rounded-full font-medium">
+                Dashboard
+              </Button>
+            </Link>
+          </div>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="rounded-full px-6 py-2 font-medium mr-2 flex items-center"
+                  onClick={connectWalletDirectly}
+                >
+                  {walletAddress ? (
+                    <div className="flex items-center">
+                      connected
+                      <div className="ml-2 relative">
+                        <span className="relative flex h-3 w-3">
+                          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"></span>
+                          <span className="relative inline-flex h-3 w-3 rounded-full bg-green-500"></span>
+                        </span>
+                      </div>
+                    </div>
+                  ) : (
+                    "connect wallet"
+                  )}
+                </Button>
+              </TooltipTrigger>
+              {walletAddress && (
+                <TooltipContent>
+                  <p>{walletAddress}</p>
+                </TooltipContent>
+              )}
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+      </div>
+      <DeformCanvas />
+      <div className="flex justify-center items-center min-h-screen">
+        {/* Main content area */}
       </div>
     </div>
   );
