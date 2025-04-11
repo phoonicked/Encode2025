@@ -183,11 +183,16 @@ export function FlowPage() {
       <header className="flex justify-between items-center p-4 border-b border-2">
         <h1 className="text-xl font-bold">Agent Flow Editor</h1>
         <div className="space-x-2">
-          <Button variant="default" onClick={handleLogFlowData}>
-            Log Flow Data
-          </Button>
-          <Button variant="default">Save</Button>
-          <Button variant="outline">Export</Button>
+          <Button variant="default" onClick={() => {
+            const saved = {
+              name: "My Agent",
+              description: "This is a test agent",
+              nodes,
+              edges
+            }
+            console.log(saved);
+            
+          }}>Save</Button>
           <Button variant="ghost">Help</Button>
         </div>
       </header>

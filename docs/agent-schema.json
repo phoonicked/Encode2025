@@ -1,55 +1,92 @@
 {
-    "name": "<Agent Name>",
-    "description": "<Agent Description>",
+    "name": "My Agent",
+    "description": "This is a test agent",
     "nodes": [
-        {
-            "type": "ai/openai",
-            "id": "1",
-            "pos": [-192, 1002],
-            "options": {
-                "model": "gpt-3.5-turbo",
-                "temperature": 0.7,
-                "max_tokens": 1000,
-                "top_p": 1,
-                "frequency_penalty": 0,
-                "presence_penalty": 0
-            }
+      {
+        "id": "1744404741938",
+        "data": {
+          "label": "OpenAI Agent"
         },
-        {
-            "type": "input/text",
-            "id": "2",
-            "pos": [-192, 1002],
-            "options": {
-            }
+        "position": {
+          "x": 272.1156738326954,
+          "y": 305.61442823858533
         },
-        {
-            "type": "output/text",
-            "id": "3",
-            "pos": [-192, 1002],
-            "options": {
-            }
+        "type": "ai/openai",
+        "measured": {
+          "width": 227,
+          "height": 161
         }
+      },
+      {
+        "id": "1744404743707",
+        "data": {
+          "label": "Text Output"
+        },
+        "position": {
+          "x": 113.86436929741389,
+          "y": 317.78711420997644
+        },
+        "type": "output/text",
+        "measured": {
+          "width": 57,
+          "height": 199
+        }
+      },
+      {
+        "id": "1744404743966",
+        "data": {
+          "label": "Text Output"
+        },
+        "position": {
+          "x": 104.11573736036667,
+          "y": 146.69920914766934
+        },
+        "type": "output/text",
+        "measured": {
+          "width": 57,
+          "height": 199
+        }
+      },
+      {
+        "id": "1744404744496",
+        "data": {
+          "label": "Text Output"
+        },
+        "position": {
+          "x": 208.44628474533465,
+          "y": 269.3652010013311
+        },
+        "type": "output/text",
+        "measured": {
+          "width": 57,
+          "height": 199
+        }
+      },
+      {
+        "id": "1744404745065",
+        "data": {
+          "label": "OpenAI Agent"
+        },
+        "position": {
+          "x": 217.29199826259003,
+          "y": 442.45614867624545
+        },
+        "type": "ai/openai",
+        "measured": {
+          "width": 227,
+          "height": 161
+        },
+        "selected": true,
+        "dragging": false
+      }
     ],
-    "connections": [
-        {
-            "from": {
-                "node": "2",
-                "port": "<Port ID>"
-            },
-            "to": {
-                "node": "1",
-                "port": "<Port ID>"
-            }
-        },
-        {
-            "from": {
-                "node": "1",
-                "port": "<Port ID>"
-            },
-            "to": {
-                "node": "3",
-                "port": "<Port ID>"
-            }
-        }
+    "edges": [
+      {
+        "source": "1744404745065",
+        "sourceHandle": "output",
+        "target": "1744404741938",
+        "targetHandle": "input",
+        "id": "xy-edge__1744404745065output-1744404741938input"
+      }
     ]
-}
+  }
