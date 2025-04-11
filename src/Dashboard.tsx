@@ -11,6 +11,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "./firebaseConfig"; // Adjust the path if needed
+import { Link } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 
 export default function AgentsDashboard() {
   const [agents, setAgents] = useState<any[]>([]);
@@ -47,11 +49,18 @@ export default function AgentsDashboard() {
       <div className="w-60 border-r border-gray-800 p-4 flex flex-col justify-between bg-[rgb(39,39,42)]">
         <div>
           <div className="space-y-4">
-            <div className="flex items-center gap-2 text-purple-300 cursor-pointer">
+            <Link
+              to="/"
+              className="flex items-center gap-2 text-lg mb-8 text-purple-300"
+            >
+              <ArrowLeft size={20} />
+              <span>Back</span>
+            </Link>
+            <div className="flex items-center gap-2 p-2 text-white transition-colors duration-300 hover:text-purple-300 cursor-pointer">
               <Bot size={18} />
               <span>Agents</span>
             </div>
-            <div className="flex items-center gap-2 cursor-pointer">
+            <div className="flex items-center gap-2 p-2 text-white transition-colors duration-300 hover:text-purple-300 cursor-pointer">
               <BarChart2 size={18} />
               <span>Stats</span>
             </div>
@@ -75,7 +84,10 @@ export default function AgentsDashboard() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <Search className="absolute right-3 top-2.5 text-gray-500" size={20} />
+          <Search
+            className="absolute right-3 top-2.5 text-gray-500"
+            size={20}
+          />
         </div>
 
         {/* Agents Grid */}
