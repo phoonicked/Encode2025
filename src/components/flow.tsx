@@ -1,5 +1,5 @@
 // src/components/Flow.tsx
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import {
   ReactFlow,
   addEdge,
@@ -13,11 +13,16 @@ import {
   type OnEdgesChange,
   type OnNodeDrag,
   type DefaultEdgeOptions,
+  Background,
+  Controls,
 } from '@xyflow/react';
+import GenericNode from './nodes/GenericNode';
+
+import '@xyflow/react/dist/style.css';
  
 const initialNodes: Node[] = [
-  { id: '1', data: { label: 'Node 1' }, position: { x: 5, y: 5 } },
-  { id: '2', data: { label: 'Node 2' }, position: { x: 5, y: 100 } },
+  { id: '1', data: { value: 'Node 1' }, position: { x: 5, y: 5 }, type: 'generic' },
+  { id: '2', data: { value: 'Node 2' }, position: { x: 5, y: 100 }, type: 'generic' },
 ];
  
 const initialEdges: Edge[] = [{ id: 'e1-2', source: '1', target: '2' }];
@@ -52,6 +57,10 @@ export default function Flow() {
     (connection) => setEdges((eds) => addEdge(connection, eds)),
     []
   );
+
+  const nodeTypes = useMemo(() => ({
+    "generic": GenericNode
+  }), []);
  
   return (
     <ReactFlow
@@ -64,6 +73,10 @@ export default function Flow() {
       fitView
       fitViewOptions={fitViewOptions}
       defaultEdgeOptions={defaultEdgeOptions}
-    />
+      nodeTypes={nodeTypes}
+    >
+      <Background />
+      <Controls />
+    </ReactFlow>
   );
 }
