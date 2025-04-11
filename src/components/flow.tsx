@@ -18,6 +18,8 @@ import TextInputNode from './nodes/inputs/TextInputNode';
 import TextOutputNode from './nodes/output/TextOutputNode';
 import NFTOutputNode from './nodes/output/NFTOutputNode';
 
+import "./flow.css";
+
 
 interface FlowProps {
   nodes: Node[];
