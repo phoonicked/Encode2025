@@ -7,9 +7,9 @@ import WormholeConnect, {
 const WormholeScreen: React.FC = () => {
   const config: WormholeConnectConfig = {
     network: 'Testnet', 
-    chains: ['Sui', 'Avalanche'], 
+    chains: ['Ethereum', 'Sepolia', 'ArbitrumSepolia', 'BaseSepolia', 'Avalanche', 'Solana', 'Polygon'], 
     ui: {
-      title: 'SUI Connect TS Demo', 
+      title: 'Connect TS Demo', 
     },
   };
 
