@@ -14,6 +14,7 @@ import {
   applyEdgeChanges,
   type Node,
   type Edge,
+  type Connection,
   type OnNodesChange,
   type OnEdgesChange,
   type OnConnect,
@@ -21,6 +22,7 @@ import {
   getOutgoers,
   getIncomers,
   getConnectedEdges,
+  IsValidConnection,
 } from '@xyflow/react';
 
 interface AvailableNodeOption {
@@ -49,36 +51,62 @@ export function FlowPage() {
     []
   );
 
+  // Get helpers from React Flow if needed
   const { getNodes, getEdges } = useReactFlow();
 
-  const isValidConnection = useCallback(
-    (connection: any) => {
-      // we are using getNodes and getEdges helpers here
-      // to make sure we create isValidConnection function only once
-      const nodes = getNodes();
-      const edges = getEdges();
-      const target = nodes.find((node) => node.id === connection.target);
-      const hasCycle = (node: any, visited = new Set()) => {
+  // Connection validation function
+  const isValidConnection: IsValidConnection = useCallback(
+    (connection) => {
+      // 1) Get current nodes/edges
+      const currentNodes = getNodes();
+      const currentEdges = getEdges();
+  
+      // 2) Find the source and target node objects
+      const sourceNode = currentNodes.find((n) => n.id === connection.source);
+      const targetNode = currentNodes.find((n) => n.id === connection.target);
+  
+      // If source or target node does not exist, disallow connection
+      if (!sourceNode || !targetNode) {
+        return false;
+      }
+
+      // Check if connection.source == connection.target (everything after /)
+      if (connection.sourceHandle!.split('/').slice(-1)[0] !== connection.targetHandle!.split('/').slice(-1)[0]) {
+        return false;
+      }
+  
+      // Prevent self-connection
+      if (sourceNode.id === targetNode.id) return false;
+  
+      // 4) **Cycle check** (keeps your existing anti-cycle logic)
+      const hasCycle = (node: Node, visited = new Set<string>()): boolean => {
         if (visited.has(node.id)) return false;
-
         visited.add(node.id);
-
-        for (const outgoer of getOutgoers(node, nodes, edges)) {
+ 
+        for (const outgoer of getOutgoers(node, currentNodes, currentEdges)) {
+          // if the outgoer is the source of the new connection, it forms a cycle
           if (outgoer.id === connection.source) return true;
           if (hasCycle(outgoer, visited)) return true;
         }
+        return false;
       };
-
-      if (target!.id === connection.source) return false;
-      return !hasCycle(target);
+  
+      // 5) Extra safeguard: disallow if source == target
+      if (targetNode.id === sourceNode.id) {
+        return false;
+      }
+  
+      // 6) Return the inverse of "cycle detected"
+      return !hasCycle(targetNode);
     },
-    [getNodes, getEdges],
+    [getNodes, getEdges]
   );
+  
+  
 
-  // Handler to add a new node at a random position
+  // Handler to add a node at a random position
   const handleAddNode = (option: AvailableNodeOption) => {
-    const defaultData = { label: option.label }; // expand this per type if needed
-
+    const defaultData = { label: option.label };
     const newNode: Node = {
       id: `${Date.now()}`,
       data: defaultData,
@@ -92,21 +120,13 @@ export function FlowPage() {
     setNodes((nds) => [...nds, newNode]);
   };
 
-  const handleSaveData = async () => {
-    const savedData = {
-      name: "My Agent",
-      description: "This is a test agent",
-      nodes,
-      edges
-    };
-    try {
-      const newAgentRef = doc(collection(db, "agents"));
-      await setDoc(newAgentRef, savedData);
-    } catch (error) {
-      console.error("Error saving data:", error);
-    }
-  }
+  // Handler to log nodes and edges
+  const handleLogFlowData = useCallback(() => {
+    console.log("Nodes:", nodes);
+    console.log("Edges:", edges);
+  }, [nodes, edges]);
 
+  // Handler for nodes deletion (unchanged)
   const onNodesDelete = useCallback(
     (deleted: any) => {
       setEdges(
@@ -114,26 +134,22 @@ export function FlowPage() {
           const incomers = getIncomers(node, nodes, edges);
           const outgoers = getOutgoers(node, nodes, edges);
           const connectedEdges = getConnectedEdges([node], edges);
-
           const remainingEdges = acc.filter(
-            (edge: any) => !connectedEdges.includes(edge),
+            (edge: any) => !connectedEdges.includes(edge)
           );
-
           const createdEdges = incomers.flatMap(({ id: source }) =>
             outgoers.map(({ id: target }) => ({
               id: `${source}->${target}`,
               source,
               target,
-            })),
+            }))
           );
-
           return [...remainingEdges, ...createdEdges];
-        }, edges),
+        }, edges)
       );
     },
-    [nodes, edges],
+    [nodes, edges]
   );
-
 
   // List of available node options (each with a label and a type)
   const availableNodes: AvailableNodeOption[] = [
@@ -142,7 +158,6 @@ export function FlowPage() {
     { label: 'Text Output', type: 'output/text' },
     { label: 'NFT Output', type: 'output/nft' },
   ];
-
 
   // Filter based on search query (case-insensitive)
   const filteredNodes = availableNodes.filter((nodeItem) =>
@@ -174,7 +189,7 @@ export function FlowPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-              <div className="max-h-170 overflow-y-auto">
+              <div className="max-h-[40%] overflow-y-auto">
                 <ul className="space-y-2 text-left">
                   {filteredNodes.map((nodeOption) => (
                     <li key={nodeOption.label}>
