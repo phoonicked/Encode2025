@@ -2,6 +2,7 @@ import { Handle, Position } from '@xyflow/react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';
 
+
 export default function OpenAINode(data: any) {
     return (
         <>

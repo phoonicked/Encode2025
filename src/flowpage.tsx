@@ -15,6 +15,10 @@ import {
   type OnNodesChange,
   type OnEdgesChange,
   type OnConnect,
+  useReactFlow,
+  getOutgoers,
+  getIncomers,
+  getConnectedEdges,
 } from '@xyflow/react';
 
 interface AvailableNodeOption {
@@ -43,6 +47,32 @@ export function FlowPage() {
     []
   );
 
+  const { getNodes, getEdges } = useReactFlow();
+
+  const isValidConnection = useCallback(
+    (connection: any) => {
+      // we are using getNodes and getEdges helpers here
+      // to make sure we create isValidConnection function only once
+      const nodes = getNodes();
+      const edges = getEdges();
+      const target = nodes.find((node) => node.id === connection.target);
+      const hasCycle = (node: any, visited = new Set()) => {
+        if (visited.has(node.id)) return false;
+ 
+        visited.add(node.id);
+ 
+        for (const outgoer of getOutgoers(node, nodes, edges)) {
+          if (outgoer.id === connection.source) return true;
+          if (hasCycle(outgoer, visited)) return true;
+        }
+      };
+ 
+      if (target!.id === connection.source) return false;
+      return !hasCycle(target);
+    },
+    [getNodes, getEdges],
+  );
+
   // Handler to add a new node at a random position
   const handleAddNode = (option: AvailableNodeOption) => {
     const defaultData = { label: option.label }; // expand this per type if needed
@@ -59,6 +89,33 @@ export function FlowPage() {
   
     setNodes((nds) => [...nds, newNode]);
   };
+
+  const onNodesDelete = useCallback(
+    (deleted: any) => {
+      setEdges(
+        deleted.reduce((acc: any, node: any) => {
+          const incomers = getIncomers(node, nodes, edges);
+          const outgoers = getOutgoers(node, nodes, edges);
+          const connectedEdges = getConnectedEdges([node], edges);
+ 
+          const remainingEdges = acc.filter(
+            (edge) => !connectedEdges.includes(edge),
+          );
+ 
+          const createdEdges = incomers.flatMap(({ id: source }) =>
+            outgoers.map(({ id: target }) => ({
+              id: `${source}->${target}`,
+              source,
+              target,
+            })),
+          );
+ 
+          return [...remainingEdges, ...createdEdges];
+        }, edges),
+      );
+    },
+    [nodes, edges],
+  );
   
 
   // List of available node options (each with a label and a type)
@@ -126,7 +183,9 @@ export function FlowPage() {
             nodes={nodes}
             edges={edges}
             onNodesChange={onNodesChange}
+            onNodesDelete={onNodesDelete}
             onEdgesChange={onEdgesChange}
+            isValidConnection={isValidConnection}
             onConnect={onConnect}
           />
         </main>
