@@ -64,26 +64,10 @@ export function FlowPage() {
   // List of available node options (each with a label and a type)
   const availableNodes: AvailableNodeOption[] = [
     { label: 'Text Input', type: 'input/text' },
-    { label: 'Webhook Trigger', type: 'input/webhook' },
-    { label: 'File Upload', type: 'input/file' },
-    { label: 'Scheduled Trigger', type: 'input/scheduled' },
-    { label: 'Email Listener', type: 'input/email' },
-    { label: 'Form Input', type: 'input/form' },
-    { label: 'Location Input', type: 'input/location' },
     { label: 'Voice Input', type: 'input/speech' },
     { label: 'OpenAI Agent', type: 'ai/openai' },
-    { label: 'If / Else', type: 'logic/if-else' },
-    { label: 'Switch', type: 'logic/switch' },
-    { label: 'Loop', type: 'logic/loop' },
-    { label: 'Wait', type: 'logic/wait' },
-    { label: 'Try / Catch', type: 'logic/try-catch' },
-    { label: 'Chat Output', type: 'output/chat' },
-    { label: 'Email Output', type: 'output/email' },
-    { label: 'Webhook Output', type: 'output/webhook' },
-    { label: 'Blockchain Output', type: 'output/blockchain' },
-    { label: 'Log Output', type: 'output/log' },
-
-
+    { label: 'Text Output', type: 'output/text' },
+    { label: 'NFT Output', type: 'output/nft' },
   ];
   
 
