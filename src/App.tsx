@@ -48,7 +48,7 @@ function Home({
               Linganguliguliguliwacha
             </Button>
           </Link>
-          <Link to="/Agents">
+          <Link to="/agents">
             <Button variant="outline" className="rounded-full font-medium">
               Dashboard
             </Button>
