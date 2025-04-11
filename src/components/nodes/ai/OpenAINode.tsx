@@ -3,7 +3,6 @@ import React from 'react';
 import { Handle, Position, useReactFlow } from '@xyflow/react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea'; // Import Textarea component
@@ -22,7 +21,7 @@ export default function OpenAINode({ data, id }: OpenAINodeProps) {
   return (
     <div className="w-[250px]">
       {/* Input handle on the left */}
-      <Handle type="target" position={Position.Left} id="input/text" />
+      <Handle type="target" position={Position.Left} id="input/text" data-type="input/text" />
       <Card>
         <CardHeader>
           <CardTitle>OpenAI Agent</CardTitle>
@@ -108,10 +107,11 @@ export default function OpenAINode({ data, id }: OpenAINodeProps) {
       </Card>
       {/* Distribute vertically */}
       <div className="flex-grow flex flex-col justify-between items-center">
-      <Handle type="source" position={Position.Right} id="output/text" style={{top: data.enableFunctions ? '33%' : '50%'}}/>
-      {data.enableFunctions && (
-        <Handle type="source" position={Position.Right} id={`output/${data.function.outputType}`} style={{top: '66%'}}/>
-      )}
+        <Handle type="source" position={Position.Right} id="output/a" data-type="output/text" style={{ top: data.enableFunctions ? '33%' : '50%' }} />
+        <Handle type="source" position={Position.Right} id="output/b" data-type={`output/${data.function?.outputType}`} style={{
+          top: '66%',
+          display: data.enableFunctions ? 'block' : 'none'
+        }} />
       </div>
     </div>
   );

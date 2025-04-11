@@ -70,8 +70,17 @@ export function FlowPage() {
         return false;
       }
 
+      // Get element with id sourceHandle:
+      const sourceHandle = document.querySelector("[data-handleid='" + connection.sourceHandle + "']");
+      const targetHandle = document.querySelector("[data-handleid='" + connection.targetHandle + "']");
+
+      // Get the data-type property on the element
+      const sourceType = sourceHandle?.getAttribute('data-type');
+      const targetType = targetHandle?.getAttribute('data-type');
+
+
       // Check if connection.source == connection.target (everything after /)
-      if (connection.sourceHandle!.split('/').slice(-1)[0] !== connection.targetHandle!.split('/').slice(-1)[0]) {
+      if (sourceType!.split('/').slice(-1)[0] !== targetType!.split('/').slice(-1)[0]) {
         return false;
       }
   

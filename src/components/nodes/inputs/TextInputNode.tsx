@@ -19,7 +19,7 @@ export default function TextInputNode({ data }: TextInputNodeProps) {
         </CardHeader>
       </Card>
       {/* Output handle on the right */}
-      <Handle type="source" position={Position.Right} id="output/text"/>
+      <Handle type="source" position={Position.Right} id="output/text" data-type="output/text"/>
 
     </div>
   );
