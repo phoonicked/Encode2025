@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../..
 export default function TextOutputNode() {
   return (
     <>
-      <Handle type="target" position={Position.Top} id="input" />
+      <Handle type="target" position={Position.Left} id="input" />
       <Card>
         <CardHeader>
           <CardTitle>Text Output</CardTitle>

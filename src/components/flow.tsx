@@ -12,7 +12,6 @@ import {
   IsValidConnection,
   OnNodesDelete,
 } from '@xyflow/react';
-import GenericNode from './nodes/GenericNode';
 import OpenAINode from './nodes/ai/OpenAINode';
 import '@xyflow/react/dist/style.css';
 import TextInputNode from './nodes/inputs/TextInputNode';
@@ -44,7 +43,6 @@ export default function Flow({
   // Map the available node types to components.
   const nodeTypes = useMemo(
     () => ({
-      generic: GenericNode,
       'ai/openai': OpenAINode,
   
       // Input nodes
