@@ -45,26 +45,47 @@ export function FlowPage() {
 
   // Handler to add a new node at a random position
   const handleAddNode = (option: AvailableNodeOption) => {
+    const defaultData = { label: option.label }; // expand this per type if needed
+  
     const newNode: Node = {
       id: `${Date.now()}`,
-      data: { value: option.label },
+      data: defaultData,
       position: {
         x: Math.random() * 250 + 100,
         y: Math.random() * 250 + 100,
       },
       type: option.type,
     };
-
+  
     setNodes((nds) => [...nds, newNode]);
   };
+  
 
   // List of available node options (each with a label and a type)
   const availableNodes: AvailableNodeOption[] = [
-    { label: 'Input Node', type: 'generic' },
-    { label: 'Process Node', type: 'generic' },
-    { label: 'Output Node', type: 'generic' },
+    { label: 'Text Input', type: 'input/text' },
+    { label: 'Webhook Trigger', type: 'input/webhook' },
+    { label: 'File Upload', type: 'input/file' },
+    { label: 'Scheduled Trigger', type: 'input/scheduled' },
+    { label: 'Email Listener', type: 'input/email' },
+    { label: 'Form Input', type: 'input/form' },
+    { label: 'Location Input', type: 'input/location' },
+    { label: 'Voice Input', type: 'input/speech' },
     { label: 'OpenAI Agent', type: 'ai/openai' },
+    { label: 'If / Else', type: 'logic/if-else' },
+    { label: 'Switch', type: 'logic/switch' },
+    { label: 'Loop', type: 'logic/loop' },
+    { label: 'Wait', type: 'logic/wait' },
+    { label: 'Try / Catch', type: 'logic/try-catch' },
+    { label: 'Chat Output', type: 'output/chat' },
+    { label: 'Email Output', type: 'output/email' },
+    { label: 'Webhook Output', type: 'output/webhook' },
+    { label: 'Blockchain Output', type: 'output/blockchain' },
+    { label: 'Log Output', type: 'output/log' },
+
+
   ];
+  
 
   // Filter based on search query (case-insensitive)
   const filteredNodes = availableNodes.filter((nodeItem) =>
@@ -85,22 +106,24 @@ export function FlowPage() {
 
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
-        <aside className="w-64 p-4 border-r space-y-4">
-          <Card>
-            <CardHeader className="text-left">
-              <CardTitle>Components</CardTitle>
-            </CardHeader>
-            <CardContent>
+        <aside className="w-[20%] p-4 border-r space-y-4">
+        <Card>
+          <CardHeader className="text-left">
+            <CardTitle>Components</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Input
+              className="w-full mb-2"
+              placeholder="Search nodes..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <div className="max-h-170 overflow-y-auto">
               <ul className="space-y-2 text-left">
-                <Input
-                  className="w-full"
-                  placeholder="Search nodes..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
                 {filteredNodes.map((nodeOption) => (
                   <li key={nodeOption.label}>
                     <Button
+                      className="w-[80%] text-left"
                       variant="outline"
                       onClick={() => handleAddNode(nodeOption)}
                     >
@@ -109,10 +132,10 @@ export function FlowPage() {
                   </li>
                 ))}
               </ul>
-            </CardContent>
-          </Card>
+            </div>
+          </CardContent>
+        </Card>
         </aside>
-
         {/* Main React Flow Area */}
         <main className="flex-1 border-2">
           <Flow
