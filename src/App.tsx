@@ -7,7 +7,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 import WormholeScreen from "./WormholeScreen";
-import { FlowPage } from "./flowpage"; // Adjust path as needed
+import { FlowPage } from "./flowpage";
 import ZoraMint from "./ZoraMint";
 import { Button } from "./components/ui/button";
 import {
@@ -28,7 +28,6 @@ function Home({
   walletAddress: string;
   connectWalletDirectly: () => void;
 }) {
-
   return (
     <div className="min-h-screen bg-zinc-900">
       <div className="fixed top-0 left-0 right-0 flex justify-center items-center p-4 z-20">
@@ -191,6 +190,7 @@ function App() {
           }
         />
         <Route path="/flowpage" element={<FlowPageWrapper />} />
+        <Route path="/flowpage/:agentId" element={<FlowPageWrapper />} />
         <Route path="/wormhole" element={<WormholeWrapper />} />
         <Route
           path="/mint"
