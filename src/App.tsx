@@ -56,13 +56,6 @@ function Home({
               Dashboard
             </Button>
           </Link>
-          <Button
-            variant="outline"
-            className="rounded-full font-medium"
-            onClick={() => setCount(count + 1)}
-          >
-            count is {count}
-          </Button>
         </div>
         <TooltipProvider>
           <Tooltip>
