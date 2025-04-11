@@ -4,6 +4,7 @@ from agent_runner.executor import execute
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 import asyncio
+import json
 
 # Read .env
 from dotenv import load_dotenv
@@ -25,18 +26,25 @@ def main():
             print(result)
 
 
-@app.websocket("/ws/run-agent")
+@app.websocket("/ws/run-function")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     try:
-        # Optional: Wait for a start signal from the client
-        await websocket.send_text("Function starting...")
+        # Wait for data from client
+        data = await websocket.receive_text()
+        params = json.loads(data)
+        await websocket.send_text(f"Received parameters: {params}")
 
-        for i in range(5):  # Simulate work
-            await asyncio.sleep(1)
-            await websocket.send_text(f"Step {i + 1}/5 complete")
+        # Simulate using the params
+        task_name = params.get("task", "default-task")
+        steps = params.get("steps", 5)
 
-        await websocket.send_text("Function finished successfully.")
+        for i in range(steps):
+            await asyncio.sleep(1)  # Simulate work
+            await websocket.send_text(f"[{task_name}] Step {i + 1}/{steps}")
+
+        await websocket.send_text(f"[{task_name}] Done ✅")
         await websocket.close()
+
     except WebSocketDisconnect:
         print("Client disconnected")
