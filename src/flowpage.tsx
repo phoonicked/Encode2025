@@ -5,7 +5,9 @@ import Flow from './components/flow'; // Your stateless Flow component
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
+import { collection, setDoc, doc } from 'firebase/firestore';
+import { db } from './firebaseConfig';
+
 import {
   addEdge,
   applyNodeChanges,
@@ -58,15 +60,15 @@ export function FlowPage() {
       const target = nodes.find((node) => node.id === connection.target);
       const hasCycle = (node: any, visited = new Set()) => {
         if (visited.has(node.id)) return false;
- 
+
         visited.add(node.id);
- 
+
         for (const outgoer of getOutgoers(node, nodes, edges)) {
           if (outgoer.id === connection.source) return true;
           if (hasCycle(outgoer, visited)) return true;
         }
       };
- 
+
       if (target!.id === connection.source) return false;
       return !hasCycle(target);
     },
@@ -76,7 +78,7 @@ export function FlowPage() {
   // Handler to add a new node at a random position
   const handleAddNode = (option: AvailableNodeOption) => {
     const defaultData = { label: option.label }; // expand this per type if needed
-  
+
     const newNode: Node = {
       id: `${Date.now()}`,
       data: defaultData,
@@ -86,9 +88,24 @@ export function FlowPage() {
       },
       type: option.type,
     };
-  
+
     setNodes((nds) => [...nds, newNode]);
   };
+
+  const handleSaveData = async () => {
+    const savedData = {
+      name: "My Agent",
+      description: "This is a test agent",
+      nodes,
+      edges
+    };
+    try {
+      const newAgentRef = doc(collection(db, "agents"));
+      await setDoc(newAgentRef, savedData);
+    } catch (error) {
+      console.error("Error saving data:", error);
+    }
+  }
 
   const onNodesDelete = useCallback(
     (deleted: any) => {
@@ -97,11 +114,11 @@ export function FlowPage() {
           const incomers = getIncomers(node, nodes, edges);
           const outgoers = getOutgoers(node, nodes, edges);
           const connectedEdges = getConnectedEdges([node], edges);
- 
+
           const remainingEdges = acc.filter(
             (edge: any) => !connectedEdges.includes(edge),
           );
- 
+
           const createdEdges = incomers.flatMap(({ id: source }) =>
             outgoers.map(({ id: target }) => ({
               id: `${source}->${target}`,
@@ -109,14 +126,14 @@ export function FlowPage() {
               target,
             })),
           );
- 
+
           return [...remainingEdges, ...createdEdges];
         }, edges),
       );
     },
     [nodes, edges],
   );
-  
+
 
   // List of available node options (each with a label and a type)
   const availableNodes: AvailableNodeOption[] = [
@@ -125,7 +142,7 @@ export function FlowPage() {
     { label: 'Text Output', type: 'output/text' },
     { label: 'NFT Output', type: 'output/nft' },
   ];
-  
+
 
   // Filter based on search query (case-insensitive)
   const filteredNodes = availableNodes.filter((nodeItem) =>
@@ -138,16 +155,7 @@ export function FlowPage() {
       <header className="flex justify-between items-center p-4 border-b border-2">
         <h1 className="text-xl font-bold">Agent Flow Editor</h1>
         <div className="space-x-2">
-          <Button variant="default" onClick={() => {
-            const saved = {
-              name: "My Agent",
-              description: "This is a test agent",
-              nodes,
-              edges
-            }
-            console.log(saved);
-            
-          }}>Save</Button>
+          <Button variant="default" onClick={handleSaveData}>Save</Button>
           <Button variant="ghost">Help</Button>
         </div>
       </header>
@@ -155,34 +163,34 @@ export function FlowPage() {
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
         <aside className="w-[20%] p-4 border-r space-y-4">
-        <Card>
-          <CardHeader className="text-left">
-            <CardTitle>Components</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Input
-              className="w-full mb-2"
-              placeholder="Search nodes..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <div className="max-h-170 overflow-y-auto">
-              <ul className="space-y-2 text-left">
-                {filteredNodes.map((nodeOption) => (
-                  <li key={nodeOption.label}>
-                    <Button
-                      className="w-[80%] text-left"
-                      variant="outline"
-                      onClick={() => handleAddNode(nodeOption)}
-                    >
-                      {nodeOption.label}
-                    </Button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </CardContent>
-        </Card>
+          <Card>
+            <CardHeader className="text-left">
+              <CardTitle>Components</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Input
+                className="w-full mb-2"
+                placeholder="Search nodes..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <div className="max-h-170 overflow-y-auto">
+                <ul className="space-y-2 text-left">
+                  {filteredNodes.map((nodeOption) => (
+                    <li key={nodeOption.label}>
+                      <Button
+                        className="w-[80%] text-left"
+                        variant="outline"
+                        onClick={() => handleAddNode(nodeOption)}
+                      >
+                        {nodeOption.label}
+                      </Button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </CardContent>
+          </Card>
         </aside>
         {/* Main React Flow Area */}
         <main className="flex-1 border-2">
