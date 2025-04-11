@@ -27,8 +27,6 @@ def agent_resolve(agent: AgentInfo) -> dict[int, Node]:
         nodes[new_node.id] = new_node    
 
     for conn in agent.connections:
-        from_node = nodes[conn.from_node]
-        to_node = nodes[conn.to_node]
-        from_node.inputs.append(to_node)
+        nodes[conn.to_node].inputs.append(conn.from_node)
 
     return nodes

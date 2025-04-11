@@ -33,11 +33,21 @@
     "connections": [
         {
             "from": {
+                "node": "2",
+                "port": "<Port ID>"
+            },
+            "to": {
+                "node": "1",
+                "port": "<Port ID>"
+            }
+        },
+        {
+            "from": {
                 "node": "1",
                 "port": "<Port ID>"
             },
             "to": {
-                "node": "2",
+                "node": "3",
                 "port": "<Port ID>"
             }
         }
