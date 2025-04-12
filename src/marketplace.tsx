@@ -1,6 +1,7 @@
 // src/components/Marketplace.tsx
 import React, { useState, useMemo, useEffect } from "react";
 import { lease } from "./lib/leaser";
+import { SiEthereum } from "react-icons/si";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "./firebaseConfig"; // Adjust the path if needed
 import { useNavigate } from "react-router-dom";
@@ -246,8 +247,9 @@ export default function Marketplace() {
                     <p className="text-sm text-gray-400">
                       {product.description}
                     </p>
-                    <p className="text-sm text-gray-400 mt-2">
-                      Price: ${product.price}
+                    <p className="text-sm text-gray-400 mt-2 flex items-center gap-1">
+                      <SiEthereum className="text-purple-300" />
+                      <span>{product.price} ETH/day</span>
                     </p>
                   </div>
                   <button
