@@ -1,86 +1,112 @@
+// App.tsx
 import { useState } from "react";
 import {
   BrowserRouter,
   Routes,
   Route,
-  Link,
   useNavigate,
 } from "react-router-dom";
 import WormholeScreen from "./WormholeScreen";
 import { FlowPage } from "./flowpage";
 import ZoraMint from "./ZoraMint";
 import { Button } from "./components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "./components/ui/tooltip";
 import AgentsDashboard from "./Dashboard";
 import { ReactFlowProvider } from "@xyflow/react";
 import DeformCanvas from "./components/DeformCanvas";
+import { LayoutDashboard, Wallet } from "lucide-react";
 
-// Home screen component with navigation bar
-function Home({
+
+function HomeScreen({
   walletAddress,
   connectWalletDirectly,
 }: {
   walletAddress: string;
   connectWalletDirectly: () => void;
 }) {
+  const navigate = useNavigate();
+
   return (
-    <div className="min-h-screen bg-zinc-900">
-      <div className="fixed top-0 left-0 right-0 flex justify-center items-center p-4 z-20">
-        <div className="flex justify-between items-center w-full max-w-4xl mx-auto p-2 bg-white/20 backdrop-blur-md shadow-md rounded-full border border-white/30">
-          <div className="flex space-x-2 mr-2">
-            <Button asChild variant="outline" className="rounded-full font-medium">
-              <Link to="/wormhole">wormhole</Link>
-            </Button>
-            <Button asChild variant="outline" className="rounded-full font-medium">
-              <Link to="/flowpage">flow</Link>
-            </Button>
-            <Button asChild variant="outline" className="rounded-full font-medium">
-              <Link to="/mint">Linganguliguliguliwacha</Link>
-            </Button>
-            <Button asChild variant="outline" className="rounded-full font-medium">
-              <Link to="/agents">Dashboard</Link>
-            </Button>
-          </div>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="rounded-full px-6 py-2 font-medium ml-2 flex items-center"
-                  onClick={connectWalletDirectly}
-                >
-                  {walletAddress ? (
-                    <div className="flex items-center">
-                      connected
-                      <div className="ml-2 relative">
-                        <span className="relative flex h-3 w-3">
-                          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"></span>
-                          <span className="relative inline-flex h-3 w-3 rounded-full bg-green-500"></span>
-                        </span>
-                      </div>
-                    </div>
-                  ) : (
-                    "connect wallet"
-                  )}
-                </Button>
-              </TooltipTrigger>
-              {walletAddress && (
-                <TooltipContent>
-                  <p>{walletAddress}</p>
-                </TooltipContent>
-              )}
-            </Tooltip>
-          </TooltipProvider>
-        </div>
-      </div>
+    <div className="min-h-screen bg-zinc-900 text-white relative">
+      {/* Background Canvas */}
       <DeformCanvas />
-      <div className="flex justify-center items-center min-h-screen">
-        {/* Main content area */}
+
+      {/* Center the entire content */}
+      <div className="flex items-center justify-center h-screen px-4">
+        {/* Glassmorphic Container for the prompt UI */}
+        <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 shadow-xl w-full max-w-lg space-y-6">
+          {/* Heading */}
+          <h1 className="text-center text-3xl md:text-4xl font-semibold">
+            What can I help with?
+          </h1>
+
+          {/* Prompt / Input Bar */}
+          <div className="flex items-center bg-zinc-800 rounded-full shadow px-4 py-2 space-x-2 w-115 h-14">
+            {/* Text Input */}
+            <input
+              type="text"
+              placeholder="Ask anything"
+              className="bg-transparent flex-1 focus:outline-none text-white placeholder-gray-400"
+            />
+          </div>
+
+          {/* Dashboard & Connect Wallet Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-between">
+            <Button
+              variant="default"
+              className="w-1/2 flex items-center justify-center gap-2 rounded-full px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-white"
+              onClick={() => navigate("/agents")}
+            >
+              <LayoutDashboard />
+              Dashboard
+            </Button>
+            {/* Wrap Connect Wallet in a relative container to show tooltip on hover */}
+            <div className="relative group w-1/2">
+              <Button
+                variant="default"
+                className="w-full flex items-center justify-center gap-2 rounded-full px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-white"
+                onClick={connectWalletDirectly}
+              >
+                <Wallet />
+                {walletAddress ? "Connected" : "Connect Wallet"}
+              </Button>
+              {/* Tooltip displayed on hover if wallet is connected */}
+              {walletAddress && (
+                <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition duration-300">
+                  {walletAddress}
+                </div>
+              )}
+            </div>
+            <button onClick={() => {
+              console.log("Establishing WS conn")
+              const socket = new WebSocket('ws://localhost:8000/ws/run-function');
+
+              socket.onopen = () => {
+                console.log('WebSocket connected');
+
+                // Send data to the server
+                const input = {
+                  input_text: "Input ",
+                  steps: 3,
+                };
+                socket.send(JSON.stringify(input));
+              };
+
+              socket.onmessage = (event) => {
+                console.log('Message from server:', event.data);
+              };
+
+              socket.onclose = () => {
+                console.log('WebSocket connection closed');
+              };
+
+              socket.onerror = (error) => {
+                console.error('WebSocket error', error);
+              };
+            }}>
+              WHAT THE SIGMA?
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -135,6 +161,7 @@ function ZoraMintWrapper({ walletAddress }: { walletAddress: string }) {
   );
 }
 
+// Wrapper for AgentsDashboard
 function AgentsDashboardWrapper() {
   return (
     <div className="min-h-screen">
@@ -173,7 +200,7 @@ function App() {
         <Route
           path="/"
           element={
-            <Home
+            <HomeScreen
               walletAddress={walletAddress}
               connectWalletDirectly={connectWalletDirectly}
             />

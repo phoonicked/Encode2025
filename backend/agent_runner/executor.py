@@ -25,7 +25,7 @@ def run(node: any, nodes: dict[int, any], context: CallingCtx) -> list[Datum]:
     inputs = []
     for input_node in node.inputs:
         input_data = run(nodes[input_node], nodes, context)
-        inputs.append(input_data)
+        inputs.extend(input_data)
 
     print("Executed " + str(node) + " with inputs:" + str(inputs))
 

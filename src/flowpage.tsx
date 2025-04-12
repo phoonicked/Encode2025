@@ -211,6 +211,7 @@ export function FlowPage() {
   const availableNodes: AvailableNodeOption[] = [
     { label: 'Text Input', type: 'input/text' },
     { label: 'OpenAI Agent', type: 'ai/openai' },
+    { label: 'Mint NFT', type: 'chain/mint' },
     { label: 'Text Output', type: 'output/text' },
     { label: 'NFT Output', type: 'output/nft' },
   ];

@@ -98,7 +98,6 @@ export default function OpenAINode({ data, id }: OpenAINodeProps) {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="text">Text</SelectItem>
-                    <SelectItem value="nft">NFT</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
