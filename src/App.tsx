@@ -1,11 +1,6 @@
 // App.tsx
 import { useState } from "react";
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  useNavigate,
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import WormholeScreen from "./WormholeScreen";
 import Cart from "./cart";
 import { FlowPage } from "./flowpage";
@@ -29,11 +24,6 @@ function HomeScreen({
 }) {
   const navigate = useNavigate();
 
-  const walletClient = createWalletClient({
-    chain: sepolia,
-    transport: custom((window as any).ethereum),
-  });
-
   return (
     <div className="min-h-screen bg-zinc-900 text-white relative">
       {/* Background Canvas */}
@@ -41,12 +31,11 @@ function HomeScreen({
 
       {/* Logo and Text */}
       <div className="absolute top-1/6 left-0 right-0 flex flex-col items-center justify-center pointer-events-none">
-        <img
-          src={Logo}
-          alt="Logo"
-          className="w-1/3 max-w-lg opacity-40"
-        />
-        <h1 className="absolute text-9xl font-extrabold text-white opacity-90 mt-30" style={{ fontFamily: "kugile" }}>
+        <img src={Logo} alt="Logo" className="w-1/3 max-w-lg opacity-40" />
+        <h1
+          className="absolute text-9xl font-extrabold text-white opacity-90 mt-30"
+          style={{ fontFamily: "kugile" }}
+        >
           IRIS
         </h1>
       </div>
@@ -179,7 +168,7 @@ function CartWrapper() {
     <div className="min-h-screen">
       <Cart />
     </div>
-  )
+  );
 }
 
 // Main App component with router configuration
@@ -223,7 +212,6 @@ function App() {
         <Route path="/wormhole" element={<WormholeWrapper />} />
         <Route path="/agents" element={<AgentsDashboardWrapper />} />
         <Route path="/marketplace" element={<MarketplaceWrapper />} />
-
       </Routes>
     </BrowserRouter>
   );

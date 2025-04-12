@@ -1,5 +1,5 @@
 // src/components/Marketplace.tsx
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo } from "react";
 
 interface Product {
   id: number;
@@ -10,53 +10,69 @@ interface Product {
 }
 
 const sampleProducts: Product[] = [
-    {
-      id: 1,
-      name: 'OpenAI API Basic',
-      description: 'Access to basic GPT-3.5 models with 100k tokens per month',
-      category: 'AI',
-      price: 20,
-    },
-    {
-      id: 2,
-      name: 'OpenAI API Pro',
-      description: 'Full access to GPT-4 models with priority support and 500k tokens per month',
-      category: 'AI',
-      price: 50,
-    },
-    {
-      id: 3,
-      name: 'Stripe API',
-      description: 'Payment processing and advanced transaction management features',
-      category: 'Payment',
-      price: 15,
-    },
-    {
-      id: 4,
-      name: 'Weather API',
-      description: 'Real-time weather data, forecasting, and historical trends',
-      category: 'Weather',
-      price: 10,
-    },
-    {
-      id: 5,
-      name: 'Maps API',
-      description: 'Geolocation, mapping, and route optimization services',
-      category: 'Location',
-      price: 25,
-    },
-  ];
+  {
+    id: 1,
+    name: "OpenAI API Basic",
+    description: "Access to basic GPT-3.5 models with 100k tokens per month",
+    category: "LLM",
+    price: 20,
+  },
+  {
+    id: 2,
+    name: "OpenAI API Pro",
+    description:
+      "Full access to GPT-4 models with priority support and 500k tokens per month",
+    category: "LLM",
+    price: 50,
+  },
+  {
+    id: 3,
+    name: "Stripe API",
+    description:
+      "Payment processing and advanced transaction management features",
+    category: "Payment",
+    price: 15,
+  },
+  {
+    id: 4,
+    name: "Weather API",
+    description: "Real-time weather data, forecasting, and historical trends",
+    category: "Weather",
+    price: 10,
+  },
+  {
+    id: 5,
+    name: "Maps API",
+    description: "Geolocation, mapping, and route optimization services",
+    category: "Location",
+    price: 25,
+  },
+];
 
-const categories = ['Sports', 'LLM', 'Weather', 'Payment'];
-const sortOptions = ['Release', 'Lowest Price', 'Highest Price'];
+const categories = ["Sports", "LLM", "Weather", "Payment"];
+const sortOptions = ["Release", "Lowest Price", "Highest Price"];
 
 export default function Marketplace() {
   // Filter and search state
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [minPrice, setMinPrice] = useState<number | ''>('');
-  const [maxPrice, setMaxPrice] = useState<number | ''>('');
-  const [sortOption, setSortOption] = useState<string>('Release');
+  const [minPrice, setMinPrice] = useState<number | "">("");
+  const [maxPrice, setMaxPrice] = useState<number | "">("");
+  const [sortOption, setSortOption] = useState<string>("Release");
+  const [showModal, setShowModal] = useState(false);
+  const [purchasedProduct, setPurchasedProduct] = useState<Product | null>(
+    null
+  );
+
+  const handleBuy = (product: Product) => {
+    setPurchasedProduct(product);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setPurchasedProduct(null);
+  };
 
   // Compute the filtered products
   const filteredProducts = useMemo(() => {
@@ -74,20 +90,24 @@ export default function Marketplace() {
       );
     }
 
-    if (minPrice !== '') {
-      filtered = filtered.filter((product) => product.price >= Number(minPrice));
+    if (minPrice !== "") {
+      filtered = filtered.filter(
+        (product) => product.price >= Number(minPrice)
+      );
     }
 
-    if (maxPrice !== '') {
-      filtered = filtered.filter((product) => product.price <= Number(maxPrice));
+    if (maxPrice !== "") {
+      filtered = filtered.filter(
+        (product) => product.price <= Number(maxPrice)
+      );
     }
 
     // Apply sorting
     switch (sortOption) {
-      case 'Lowest Price':
+      case "Lowest Price":
         filtered.sort((a, b) => a.price - b.price);
         break;
-      case 'Highest Price':
+      case "Highest Price":
         filtered.sort((a, b) => b.price - a.price);
         break;
       default:
@@ -99,10 +119,10 @@ export default function Marketplace() {
 
   // Determine if filters are not applied
   const showHero =
-    searchQuery.trim() === '' &&
+    searchQuery.trim() === "" &&
     selectedCategories.length === 0 &&
-    minPrice === '' &&
-    maxPrice === '';
+    minPrice === "" &&
+    maxPrice === "";
 
   // For simplicity, here is a dummy rendering for category filters and sort:
   // ... (render checkboxes and sort radio buttons in the sidebar as needed)
@@ -146,7 +166,7 @@ export default function Marketplace() {
                 placeholder="Min Price"
                 value={minPrice}
                 onChange={(e) =>
-                  setMinPrice(e.target.value ? Number(e.target.value) : '')
+                  setMinPrice(e.target.value ? Number(e.target.value) : "")
                 }
                 className="w-1/2 bg-zinc-900 text-white p-1 border border-zinc-700 rounded"
               />
@@ -155,7 +175,7 @@ export default function Marketplace() {
                 placeholder="Max Price"
                 value={maxPrice}
                 onChange={(e) =>
-                  setMaxPrice(e.target.value ? Number(e.target.value) : '')
+                  setMaxPrice(e.target.value ? Number(e.target.value) : "")
                 }
                 className="w-1/2 bg-zinc-900 text-white p-1 border border-zinc-700 rounded"
               />
@@ -200,9 +220,12 @@ export default function Marketplace() {
           <div className="bg-zinc-800 p-6 rounded-lg flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6 h-[80%]">
             {/* Hero product details */}
             <div className="flex-1 text-center md:text-left">
-              <h2 className="text-3xl font-bold text-purple-300">Featured Product Name</h2>
+              <h2 className="text-3xl font-bold text-purple-300">
+                Featured Product Name
+              </h2>
               <p className="mt-2 text-gray-400">
-                This is a highlighted product that we think you'll love. It comes with special features and a limited time offer.
+                This is a highlighted product that we think you'll love. It
+                comes with special features and a limited time offer.
               </p>
               <div className="mt-4">
                 <button className="bg-purple-300 text-black px-4 py-2 rounded">
@@ -225,21 +248,47 @@ export default function Marketplace() {
                     <h4 className="text-lg font-semibold mb-2 text-purple-300">
                       {product.name}
                     </h4>
-                    <p className="text-sm text-gray-400">{product.description}</p>
+                    <p className="text-sm text-gray-400">
+                      {product.description}
+                    </p>
                     <p className="text-sm text-gray-400 mt-2">
                       Price: ${product.price}
                     </p>
                   </div>
+                  <button
+                    onClick={() => handleBuy(product)}
+                    className="mt-4 bg-purple-300 hover:bg-purple-400 text-white font-bold py-2 px-4 rounded"
+                  >
+                    Buy
+                  </button>
                 </div>
               ))}
             </div>
           ) : (
             <div className="bg-zinc-800 p-6 rounded-lg text-center">
-              <p className="text-lg font-medium">No products match your filters.</p>
+              <p className="text-lg font-medium">
+                No products match your filters.
+              </p>
             </div>
           )}
         </div>
       </main>
+      {showModal && purchasedProduct && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
+          <div className="bg-zinc-800 rounded-lg p-6 w-full max-w-sm text-center shadow-xl">
+            <h2 className="text-xl font-semibold text-gray-100 mb-4">
+              Thank you for purchasing{" "}
+              <span className="text-purple-300">{purchasedProduct.name}</span>!
+            </h2>
+            <button
+              onClick={closeModal}
+              className="bg-purple-300 text-white px-4 py-2 rounded hover:bg-purple-500"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
