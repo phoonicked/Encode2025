@@ -1,0 +1,285 @@
+{
+	"compiler": {
+		"version": "0.8.26+commit.8a97fa7a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "nodeId",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "leaser",
+						"type": "address"
+					}
+				],
+				"name": "NodeLeased",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "nodeId",
+						"type": "uint256"
+					}
+				],
+				"name": "NodeRegistered",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "nodeId",
+						"type": "uint256"
+					}
+				],
+				"name": "checkMyLease",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "isValid",
+						"type": "bool"
+					},
+					{
+						"internalType": "uint256",
+						"name": "remainingTime",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "nodeId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "leaser",
+						"type": "address"
+					}
+				],
+				"name": "isLeaseValid",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "nodeId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint32",
+						"name": "durationHours",
+						"type": "uint32"
+					}
+				],
+				"name": "leaseNode",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "leases",
+				"outputs": [
+					{
+						"internalType": "uint64",
+						"name": "startTime",
+						"type": "uint64"
+					},
+					{
+						"internalType": "uint32",
+						"name": "durationHours",
+						"type": "uint32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "nodes",
+				"outputs": [
+					{
+						"internalType": "uint96",
+						"name": "hourlyRate",
+						"type": "uint96"
+					},
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					},
+					{
+						"internalType": "bool",
+						"name": "exists",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "pendingWithdrawals",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "nodeId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint96",
+						"name": "hourlyRate",
+						"type": "uint96"
+					}
+				],
+				"name": "registerNode",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "nodeId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint96",
+						"name": "newRate",
+						"type": "uint96"
+					}
+				],
+				"name": "updateNodeRate",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "withdraw",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"details": "Gas-optimized contract for leasing nodes with hourly rates",
+			"kind": "dev",
+			"methods": {
+				"checkMyLease(uint256)": {
+					"details": "Check user's lease status"
+				},
+				"isLeaseValid(uint256,address)": {
+					"details": "Check if a lease is valid"
+				},
+				"leaseNode(uint256,uint32)": {
+					"details": "Lease a node for a specified duration"
+				},
+				"registerNode(uint256,uint96)": {
+					"details": "Register a new node"
+				},
+				"updateNodeRate(uint256,uint96)": {
+					"details": "Update node hourly rate (simple version)"
+				},
+				"withdraw()": {
+					"details": "Withdraw pending payments"
+				}
+			},
+			"title": "OptimizedNodeLeasing",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"sol/Leasing.sol": "OptimizedNodeLeasing"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"sol/Leasing.sol": {
+			"keccak256": "0x7289771ccf047db947cbde44f406806f8af9a5e8941aa927e39dfe0c5dd76954",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://e79cf7a80bb4fd6121911f76a7e2a9ff4f88dcb15382e53e2fcddef4af93678c",
+				"dweb:/ipfs/QmU4wvHwWP9trtMakmgvPtYe8UTZs2xiuCTe1GTMo3V4zi"
+			]
+		}
+	},
+	"version": 1
+}
