@@ -3,6 +3,7 @@ from agent_runner.nodes import *
 
 __switcher = {
     "ai/openai": OpenAINode,
+    "chain/mint": MintNode,
     "input/text": InputText,
     "output/text": OutputText,
     "output/nft": OutputNFT,
