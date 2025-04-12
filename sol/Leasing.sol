@@ -45,10 +45,10 @@ contract LeaseMarketplace {
     function registerAsset(uint256 assetId, uint256 hourlyRate) external {
         require(assets[assetId].owner == address(0), "Asset already registered");
         assets[assetId] = Asset({
-            owner: msg.sender,
+            owner: address(this),
             hourlyRate: hourlyRate   // Use ether literal, e.g., 0.01 ether.
         });
-        emit AssetRegistered(assetId, msg.sender, hourlyRate);
+        emit AssetRegistered(assetId, address(this), hourlyRate);
     }
     
     /// @notice Calculate the lease price for an asset given a duration.
