@@ -1,12 +1,6 @@
 // src/components/AgentsDashboard.tsx
 import { useState } from "react";
-import {
-  Search,
-  PlusCircle,
-  BarChart2,
-  Bot,
-  PlayCircle,
-} from "lucide-react";
+import { Search, PlusCircle, BarChart2, Bot, PlayCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "./firebaseConfig"; // Adjust the path if needed
@@ -49,10 +43,10 @@ export default function AgentsDashboard() {
       {/* Sidebar */}
       <div className="w-60 border-r border-gray-800 p-4 flex flex-col justify-between bg-[rgb(39,39,42)]">
         <div>
-          <div className="flex flex-row justify-content-center gap-2 mb-4">
+          <div className="flex items-center gap-2 mb-4">
             <img src={logo} alt="Logo" className="w-12 h-auto object-contain" />
             <h3
-              className="text-3xl font-bold text-purple-300"
+              className="text-3xl font-bold text-purple-300 pt-4"
               style={{ fontFamily: "kugile" }}
             >
               IRIS
