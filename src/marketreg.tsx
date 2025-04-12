@@ -5,19 +5,52 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ethers } from "ethers";
 
 interface Product {
     name: string;
     description: string;
     category: string;
-    price: number;
-    coin: string;
+    coin_name: string;
+    coin_symbol: string;
+    initial_supply: number;
+}
+
+const factoryAddress = "0xa8d12B50d1e627a17562C6ab823AE767a88721d4";
+const factoryABI = [
+    "function createToken(string name, string symbol, uint256 initialSupply) external",
+];
+
+async function spawnToken(name: string, symbol: string, supply: number) {
+    //@ts-ignore
+    if (!window.ethereum) {
+        alert("Install MetaMask first!");
+        return;
+    }
+
+    //@ts-ignore
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    //@ts-ignore
+    await window.ethereum.request({ method: "eth_requestAccounts" });
+
+    const signer = await provider.getSigner();
+    const factory = new ethers.Contract(factoryAddress, factoryABI, signer);
+
+    const tx = await factory.createToken(name, symbol, supply);
+    console.log(`Creating ${name}... TX: ${tx.hash}`);
+    const res = await tx.wait();
+    console.log(`${name} created!`);
+    return res.to;
 }
 
 async function save(savedData: any) {
     try {
         const marketDocRef = doc(collection(db, "market"));
-        await setDoc(marketDocRef, savedData);
+        const res = await spawnToken(savedData.coin_name, savedData.coin_symbol, savedData.initial_supply);
+        await setDoc(marketDocRef, {
+            ...savedData,
+            tokenAddress: res,
+        });
         console.log("Market saved successfully with ID:", marketDocRef.id);
     } catch (error) {
         console.error("Error saving market data:", error);
@@ -29,15 +62,16 @@ export default function Marketreg() {
         name: "",
         description: "",
         category: "",
-        price: 0,
-        coin: "",
+        coin_name: "",
+        coin_symbol: "",
+        initial_supply: 0,
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setProduct((prev) => ({
             ...prev,
-            [name]: value,
+            [name]: name === "initial_supply" ? Number(value) : value,
         }));
     };
 
@@ -55,8 +89,9 @@ export default function Marketreg() {
             name: "",
             description: "",
             category: "",
-            price: 0,
-            coin: "",
+            coin_name: "",
+            coin_symbol: "",
+            initial_supply: 0,
         });
     };
 
@@ -88,12 +123,16 @@ export default function Marketreg() {
                         </Select>
                     </div>
                     <div>
-                        <Label htmlFor="price" className="text-gray-300 mb-1 block">Price</Label>
-                        <Input id="price" name="price" type="text" value={product.price} onChange={handleChange} className="w-full bg-zinc-900 text-white p-2 rounded border border-zinc-700" />
+                        <Label htmlFor="coin_name" className="text-gray-300 mb-1 block">Coin Name</Label>
+                        <Input id="coin_name" name="coin_name" type="text" value={product.coin_name} onChange={handleChange} className="w-full bg-zinc-900 text-white p-2 rounded border border-zinc-700" />
                     </div>
                     <div>
-                        <Label htmlFor="coin" className="text-gray-300 mb-1 block">Coin</Label>
-                        <Input id="coin" name="coin" type="text" value={product.coin} onChange={handleChange} className="w-full bg-zinc-900 text-white p-2 rounded border border-zinc-700" />
+                        <Label htmlFor="coin_symbol" className="text-gray-300 mb-1 block">Coin Symbol</Label>
+                        <Input id="coin_symbol" name="coin_symbol" type="text" value={product.coin_symbol} onChange={handleChange} className="w-full bg-zinc-900 text-white p-2 rounded border border-zinc-700" />
+                    </div>
+                    <div>
+                        <Label htmlFor="initial_supply" className="text-gray-300 mb-1 block">Initial Supply</Label>
+                        <Input id="initial_supply" name="initial_supply" type="number" value={product.initial_supply} onChange={handleChange} className="w-full bg-zinc-900 text-white p-2 rounded border border-zinc-700" />
                     </div>
                     <Button type="submit" className="w-full bg-purple-500 hover:bg-purple-600 text-white">Save Product</Button>
                 </form>
