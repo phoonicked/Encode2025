@@ -44,7 +44,7 @@ function HomeScreen({
           alt="Logo"
           className="w-1/3 max-w-lg opacity-40"
         />
-        <h1 className="absolute text-8xl font-extrabold text-white opacity-70 mt-30">
+        <h1 className="absolute text-9xl font-extrabold text-white opacity-90 mt-30" style={{ fontFamily: "kugile" }}>
           IRIS
         </h1>
       </div>
