@@ -26,7 +26,7 @@ class Node:
         """
         return isinstance(self, OutputNode)
 
-    def execute(self, *args, **kwargs) -> list[Datum]:
+    async def execute(self, *args, **kwargs) -> list[Datum]:
         """
         Executes the node. By default, it raises a NotImplementedError.
         Subclasses should override this method to define specific behavior.
@@ -43,7 +43,7 @@ class OpenAINode(Node):
     def requires_keys(self) -> list[str]:
         return ["OPENAI_API_KEY"]
 
-    def execute(self, inputs: list[Datum], context: CallingCtx) -> list[Datum]:
+    async def execute(self, inputs: list[Datum], context: CallingCtx) -> list[Datum]:
         """
         Simulates calling the OpenAI API with the given input text and API key.
         """
@@ -98,7 +98,7 @@ class OpenAINode(Node):
     
 class MintNode(Node):
 
-    def execute(self, inputs: list[Datum], context: CallingCtx) -> list[Datum]:
+    async def execute(self, inputs: list[Datum], context: CallingCtx) -> list[Datum]:
         """
         Simulates minting an NFT with the given input text and wallet address.
         """
@@ -106,25 +106,33 @@ class MintNode(Node):
 
         # Establish websocket connection
 
-        return [NFTDatum(inputs[0].tostring())]
+        await context.send_message({
+            "type": "mint",
+            "data": inputs[0].tostring()
+        })
+        response = await context.await_response()
+        if response["type"] == "minted":
+            return [NFTDatum(response["data"])]
+        else:
+            return [NFTDatum("ERROR")]
 
 class InputText(InputNode):
 
-    def execute(self, inputs: list[Datum], context: CallingCtx) -> list[Datum]:
+    async def execute(self, inputs: list[Datum], context: CallingCtx) -> list[Datum]:
         """
         Returns the input text.
         """
         return [StrDatum(context.input_text)] if context.input_text else []
 
 class OutputText(OutputNode):
-    def execute(self, inputs: list[Datum], context: CallingCtx) -> list[Datum]:
+    async def execute(self, inputs: list[Datum], context: CallingCtx) -> list[Datum]:
         """
         Outputs the given text.
         """
         return [inputs[0]] if len(inputs) > 0 else []
     
 class OutputNFT(OutputNode):
-    def execute(self, inputs: list[Datum], context: CallingCtx) -> list[Datum]:
+    async def execute(self, inputs: list[Datum], context: CallingCtx) -> list[Datum]:
         """
         Outputs the given NFT.
         """

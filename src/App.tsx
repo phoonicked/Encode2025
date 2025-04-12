@@ -8,12 +8,14 @@ import {
 } from "react-router-dom";
 import WormholeScreen from "./WormholeScreen";
 import { FlowPage } from "./flowpage";
-import ZoraMint from "./ZoraMint";
+import { handleMint } from "./minter";
 import { Button } from "./components/ui/button";
 import AgentsDashboard from "./Dashboard";
 import { ReactFlowProvider } from "@xyflow/react";
 import DeformCanvas from "./components/DeformCanvas";
 import { LayoutDashboard, Wallet } from "lucide-react";
+import { createWalletClient, custom } from "viem";
+import { sepolia } from "viem/chains";
 
 
 function HomeScreen({
@@ -24,6 +26,11 @@ function HomeScreen({
   connectWalletDirectly: () => void;
 }) {
   const navigate = useNavigate();
+
+  const walletClient = createWalletClient({
+    chain: sepolia,
+    transport: custom((window as any).ethereum),
+  });
 
   return (
     <div className="min-h-screen bg-zinc-900 text-white relative">
@@ -85,14 +92,31 @@ function HomeScreen({
 
                 // Send data to the server
                 const input = {
-                  input_text: "Input ",
-                  steps: 3,
+                  input_text: "Make me a monkey NFT",
                 };
                 socket.send(JSON.stringify(input));
               };
 
               socket.onmessage = (event) => {
-                console.log('Message from server:', event.data);
+                const message = JSON.parse(event.data);
+                switch (message.type) {
+                  case "log":
+                    console.log("Log:", message.message);
+                    break;
+                  case "mint":
+                    console.log("Minting NFT...");
+                    (async () => {
+                      const result = await handleMint(walletAddress, message.data, walletClient);
+                      if (result?.success) {
+                        console.log("NFT minted successfully:", result.result);
+                        socket.send(JSON.stringify({ type: "minted", data: result.result }));
+                      } else {
+                        console.error("Minting failed");
+                        socket.send(JSON.stringify({ type: "error", message: "Minting failed" }));
+                      }
+                    })();
+                    break;
+                }
               };
 
               socket.onclose = () => {
@@ -152,25 +176,6 @@ function WormholeWrapper() {
   );
 }
 
-// Wrapper for ZoraMint with a Back button
-function ZoraMintWrapper({ walletAddress }: { walletAddress: string }) {
-  const navigate = useNavigate();
-  return (
-    <div className="min-h-screen">
-      <header className="p-4">
-        <Button
-          variant="outline"
-          className="rounded-full"
-          onClick={() => navigate("/")}
-        >
-          Back
-        </Button>
-      </header>
-      <ZoraMint walletAddress={walletAddress} />
-    </div>
-  );
-}
-
 // Wrapper for AgentsDashboard
 function AgentsDashboardWrapper() {
   return (
@@ -219,10 +224,6 @@ function App() {
         <Route path="/flowpage" element={<FlowPageWrapper />} />
         <Route path="/flowpage/:agentId" element={<FlowPageWrapper />} />
         <Route path="/wormhole" element={<WormholeWrapper />} />
-        <Route
-          path="/mint"
-          element={<ZoraMintWrapper walletAddress={walletAddress} />}
-        />
         <Route path="/agents" element={<AgentsDashboardWrapper />} />
       </Routes>
     </BrowserRouter>
