@@ -1,5 +1,5 @@
 // src/components/FlowPage.tsx
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, DragEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';  // Import useParams for route parameters
 import Flow from './components/flow'; // Your stateless Flow component
 // Import your UI components (adjust the paths as needed)
@@ -36,6 +36,7 @@ export function FlowPage() {
   // Get the agentId from the URL parameters (if editing an existing agent)
   const { agentId } = useParams<{ agentId: string }>();
   const navigate = useNavigate();
+  const reactFlowInstance = useReactFlow();
 
   // State for nodes and edges
   const [nodes, setNodes] = useState<Node[]>([]);
@@ -152,6 +153,51 @@ export function FlowPage() {
     setNodes((nds) => [...nds, newNode]);
   };
 
+  // Handler for drag start
+  const onDragStart = (event: DragEvent<HTMLButtonElement>, nodeOption: AvailableNodeOption) => {
+    event.dataTransfer.setData('application/reactflow', JSON.stringify(nodeOption));
+    event.dataTransfer.effectAllowed = 'move';
+  };
+
+  // Handler for drag over
+  const onDragOver = useCallback((event: DragEvent) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+  }, []);
+
+  // Handler for drop
+  const onDrop = useCallback(
+    (event: DragEvent) => {
+      event.preventDefault();
+
+      // Get the drop position
+      const reactFlowBounds = document.querySelector('.react-flow')?.getBoundingClientRect();
+      if (!reactFlowBounds || !reactFlowInstance) return;
+
+      const nodeOptionString = event.dataTransfer.getData('application/reactflow');
+      if (!nodeOptionString) return;
+      
+      const nodeOption = JSON.parse(nodeOptionString) as AvailableNodeOption;
+
+      // Calculate the position where the node should be created
+      const position = reactFlowInstance.screenToFlowPosition({
+        x: event.clientX - reactFlowBounds.left + 230,
+        y: event.clientY - reactFlowBounds.top,
+      });
+
+      // Create a new node
+      const newNode: Node = {
+        id: `${Date.now()}`,
+        type: nodeOption.type,
+        position,
+        data: { label: nodeOption.label },
+      };
+
+      setNodes((nds) => [...nds, newNode]);
+    },
+    [reactFlowInstance]
+  );
+
   // Save data handler: updates existing agent if agentId exists; otherwise creates a new document
   const handleSaveData = async () => {
     const savedData = {
@@ -235,7 +281,7 @@ export function FlowPage() {
       <div className="flex flex-1 overflow-hidden text-gray-300 bg-zinc-900">
         {/* Sidebar */}
         <aside className="w-[24%] pl-4 pr-4 space-y-4 bg-zinc-900 flex flex-col justify-between">
-          <Card className='bg-zinc-800'>
+          <Card className='bg-zinc-800 h-full'>
             <CardHeader className="text-3xl text-left text-purple-300">
               <CardTitle>Components</CardTitle>
             </CardHeader>
@@ -254,6 +300,8 @@ export function FlowPage() {
                         className="w-full text-left bg-purple-300 text-black"
                         variant="outline"
                         onClick={() => handleAddNode(nodeOption)}
+                        draggable
+                        onDragStart={(event) => onDragStart(event, nodeOption)}
                       >
                         {nodeOption.label}
                       </Button>
@@ -279,6 +327,8 @@ export function FlowPage() {
             onEdgesChange={onEdgesChange}
             isValidConnection={isValidConnection}
             onConnect={onConnect}
+            onDrop={onDrop}
+            onDragOver={onDragOver}
           />
         </main>
       </div>

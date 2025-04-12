@@ -10,6 +10,7 @@ import {
   type OnConnect,
   IsValidConnection,
   OnNodesDelete,
+  Panel,
 } from '@xyflow/react';
 import OpenAINode from './nodes/ai/OpenAINode';
 import '@xyflow/react/dist/style.css';
@@ -28,6 +29,8 @@ interface FlowProps {
   isValidConnection: IsValidConnection;
   onConnect: OnConnect;
   onLoad?: (instance: any) => void;
+  onDrop?: (event: React.DragEvent) => void;
+  onDragOver?: (event: React.DragEvent) => void;
 }
 
 export default function Flow({
@@ -39,6 +42,8 @@ export default function Flow({
   onConnect,
   isValidConnection,
   onLoad,
+  onDrop,
+  onDragOver,
 }: FlowProps) {
   const nodeTypes = useMemo(
     () => ({
@@ -64,6 +69,8 @@ export default function Flow({
       nodeTypes={nodeTypes}
       colorMode='dark'
       fitView
+      onDrop={onDrop}
+      onDragOver={onDragOver}
     >
       <Background />
       <Controls />
