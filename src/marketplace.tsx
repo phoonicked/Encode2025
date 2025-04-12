@@ -1,6 +1,7 @@
 // src/components/Marketplace.tsx
 import React, { useState, useMemo } from "react";
 import { lease } from "./lib/leaser";
+import { SiEthereum } from "react-icons/si";
 
 interface Product {
   id: number;
@@ -16,7 +17,7 @@ const sampleProducts: Product[] = [
     name: "OpenAI API Basic",
     description: "Access to basic GPT-3.5 models with 100k tokens per month",
     category: "LLM",
-    price: 20,
+    price: 0.001,
   },
   {
     id: 2,
@@ -24,29 +25,29 @@ const sampleProducts: Product[] = [
     description:
       "Full access to GPT-4 models with priority support and 500k tokens per month",
     category: "LLM",
-    price: 50,
+    price: 0.0023,
   },
   {
     id: 3,
-    name: "Stripe API",
+    name: "Zama API",
     description:
       "Payment processing and advanced transaction management features",
     category: "Payment",
-    price: 15,
+    price: 0.0015,
   },
   {
     id: 4,
     name: "Weather API",
     description: "Real-time weather data, forecasting, and historical trends",
     category: "Weather",
-    price: 10,
+    price: 0.0011,
   },
   {
     id: 5,
     name: "Maps API",
     description: "Geolocation, mapping, and route optimization services",
     category: "Location",
-    price: 25,
+    price: 0.0013,
   },
 ];
 
@@ -259,8 +260,9 @@ export default function Marketplace() {
                     <p className="text-sm text-gray-400">
                       {product.description}
                     </p>
-                    <p className="text-sm text-gray-400 mt-2">
-                      Price: ${product.price}
+                    <p className="text-sm text-gray-400 mt-2 flex items-center gap-1">
+                      <SiEthereum className="text-purple-300" />
+                      <span>{product.price} ETH/day</span>
                     </p>
                   </div>
                   <button
