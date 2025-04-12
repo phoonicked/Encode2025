@@ -24,14 +24,15 @@ export default function OpenAINode({ data, id }: OpenAINodeProps) {
       <Handle type="target" position={Position.Left} id="input/text" data-type="input/text" />
       <Card>
         <CardHeader>
-          <CardTitle>OpenAI Agent</CardTitle>
-          <CardDescription>Connect to an OpenAI LLM agent.</CardDescription>
+          <CardTitle className='text-purple-300'>OpenAI Agent</CardTitle>
+          <CardDescription className='text-purple-200'>Connect to an OpenAI LLM agent.</CardDescription>
         </CardHeader>
         <CardContent>
           {/* System Prompt */}
           <div className="grid w-full max-w-sm items-center gap-1.5">
-            <Label htmlFor="system-prompt">System Prompt</Label>
+            <Label className='text-purple-200' htmlFor="system-prompt">System Prompt</Label>
             <Textarea
+              className='text-white'
               id="system-prompt"
               placeholder="Enter system prompt..."
               value={data.systemPrompt || ''}
@@ -41,7 +42,7 @@ export default function OpenAINode({ data, id }: OpenAINodeProps) {
 
           {/* Model Selection */}
           <div className="grid w-full max-w-sm items-center gap-1.5 mt-4">
-            <Label htmlFor="model">AI Model</Label>
+            <Label className='text-purple-200' htmlFor="model">AI Model</Label>
             <Select
               value={data.model || ''}
               onValueChange={(value) => updateNodeData(id, { model: value })}
@@ -63,14 +64,14 @@ export default function OpenAINode({ data, id }: OpenAINodeProps) {
               onCheckedChange={(enabled) => updateNodeData(id, { enableFunctions: enabled })}
               className="mr-2"
             />
-            <span className="text-sm">Enable Function Definition</span>
+            <span className=" text-purple-200 text-sm">Enable Function Definition</span>
           </div>
 
           {/* Function Definition UI */}
           {data.enableFunctions && (
             <div className="mt-4">
               <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="function-description">Function Description</Label>
+                <Label className='text-purple-200' htmlFor=" function-description">Function Description</Label>
                 <Textarea
                   id="function-description"
                   placeholder="Enter function description..."
@@ -83,7 +84,7 @@ export default function OpenAINode({ data, id }: OpenAINodeProps) {
                 />
               </div>
               <div className="grid w-full max-w-sm items-center gap-1.5 mt-4">
-                <Label htmlFor="output-type">Output Type</Label>
+                <Label className='text-purple-200' htmlFor="output-type">Output Type</Label>
                 <Select
                   value={data.function?.outputType || 'Text'}
                   onValueChange={(value) =>

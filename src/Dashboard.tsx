@@ -13,6 +13,8 @@ import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "./firebaseConfig"; // Adjust the path if needed
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area"; // Import the ScrollArea component
+import logo from "./assets/logo.svg";
 
 export default function AgentsDashboard() {
   const [agents, setAgents] = useState<any[]>([]);
@@ -44,18 +46,12 @@ export default function AgentsDashboard() {
   );
 
   return (
-    <div className="flex h-screen bg-zinc-900 text-gray-300">
+    <div className="flex h-screen bg-zinc-900 text-gray-300 overflow-hidden">
       {/* Sidebar */}
       <div className="w-60 border-r border-gray-800 p-4 flex flex-col justify-between bg-[rgb(39,39,42)]">
         <div>
+          <img src={logo} alt="Logo" className="w-12 h-auto object-contain" />
           <div className="space-y-4">
-            <Link
-              to="/"
-              className="flex items-center gap-2 text-lg mb-8 text-purple-300"
-            >
-              <ArrowLeft size={20} />
-              <span>Back</span>
-            </Link>
             <div className="flex items-center gap-2 p-2 text-white transition-colors duration-300 hover:text-purple-300 cursor-pointer">
               <Bot size={18} />
               <span>Agents</span>
@@ -68,7 +64,13 @@ export default function AgentsDashboard() {
         </div>
         <div className="mb-2">
           <div className="flex items-center gap-2 opacity-70 cursor-pointer">
-            <Info size={18} />
+            <Link
+              to="/"
+              className="flex items-center gap-2 text-lg mb-8 text-purple-300"
+            >
+              <ArrowLeft size={20} />
+              <span>Back</span>
+            </Link>
           </div>
         </div>
       </div>
@@ -90,31 +92,33 @@ export default function AgentsDashboard() {
           />
         </div>
 
-        {/* Agents Grid */}
-        <div className="grid grid-cols-2 gap-6">
-          {filteredAgents.map((agent) => (
-            <div
-              key={agent.id}
-              onDoubleClick={() => navigate(`/flowpage/${agent.id}`)}
-              className="bg-zinc-800 rounded-lg p-4 bg-[rgb(39,39,42)] cursor-pointer"
-            >
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-gray-600 rounded-full"></div>
-                  <span className="text-purple-300 hover:underline">
-                    {agent.name}
-                  </span>
+        {/* Agents Grid with ScrollArea */}
+        <ScrollArea className="flex-1 h-[calc(100vh-160px)]">
+          <div className="grid grid-cols-2 gap-6 pb-20">
+            {filteredAgents.map((agent) => (
+              <div
+                key={agent.id}
+                onDoubleClick={() => navigate(`/flowpage/${agent.id}`)}
+                className="bg-zinc-800 rounded-lg p-4 bg-[rgb(39,39,42)] cursor-pointer"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-gray-600 rounded-full"></div>
+                    <span className="text-purple-300 hover:underline">
+                      {agent.name}
+                    </span>
+                  </div>
+                  <button className="p-2 hover:bg-gray-700 rounded-full">
+                    <PlayCircle size={24} className="text-purple-300" />
+                  </button>
                 </div>
-                <button className="p-2 hover:bg-gray-700 rounded-full">
-                  <PlayCircle size={24} className="text-purple-300" />
-                </button>
+                <div className="text-sm opacity-70">
+                  Agent purpose: {agent.description}
+                </div>
               </div>
-              <div className="text-sm opacity-70">
-                Agent purpose: {agent.description}
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </ScrollArea>
 
         {/* Create New Button */}
         <div className="absolute bottom-6 right-6">

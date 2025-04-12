@@ -15,8 +15,8 @@ export default function TextOutputNode({ data }: TextOutputNodeProps) {
       <Handle type="target" position={Position.Left} id="input/text" data-type="input/text"/>
       <Card>
         <CardHeader>
-          <CardTitle>Text Output</CardTitle>
-          <CardDescription>Display text output.</CardDescription>
+          <CardTitle className='text-purple-300'>Text Output</CardTitle>
+          <CardDescription className='text-purple-200'>Display text output.</CardDescription>
         </CardHeader>
       </Card>
     </div>
