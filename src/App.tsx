@@ -88,18 +88,8 @@ function Home({
 
 // Wrapper for FlowPage with a Back button
 function FlowPageWrapper() {
-  const navigate = useNavigate();
   return (
     <div className="min-h-screen">
-      <header className="p-4">
-        <Button
-          variant="outline"
-          className="rounded-full"
-          onClick={() => navigate("/")}
-        >
-          Back
-        </Button>
-      </header>
       <ReactFlowProvider>
         <FlowPage />
       </ReactFlowProvider>

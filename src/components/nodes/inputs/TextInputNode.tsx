@@ -14,8 +14,8 @@ export default function TextInputNode({ data }: TextInputNodeProps) {
       {/* Since this is an input node, we show only the output handle on the right */}
       <Card>
         <CardHeader>
-          <CardTitle>Text Input</CardTitle>
-          <CardDescription>Enter text data.</CardDescription>
+          <CardTitle className='text-purple-300'>Text Input</CardTitle>
+          <CardDescription className='text-purple-200'>Enter text data.</CardDescription>
         </CardHeader>
       </Card>
       {/* Output handle on the right */}

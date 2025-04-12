@@ -19,3 +19,13 @@
 .react-flow {
   border-radius: 16px;
 }
+
+.bg-card {
+  background-color: transparent !important;
+}
+
+.react-flow__node {
+  background-color: #27272A; 
+  border: 5px solid #d8b4fe;
+  border-radius: 16px; 
+}

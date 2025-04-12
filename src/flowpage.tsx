@@ -1,11 +1,11 @@
 // src/components/FlowPage.tsx
 import React, { useState, useCallback, useEffect } from 'react';
-import { useParams } from 'react-router-dom';  // Import useParams for route parameters
+import { useNavigate, useParams } from 'react-router-dom';  // Import useParams for route parameters
 import Flow from './components/flow'; // Your stateless Flow component
 // Import your UI components (adjust the paths as needed)
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 // Import Firestore functions, including getDoc for loading agent data
 import { collection, setDoc, doc, getDoc } from 'firebase/firestore';
 import { db } from './firebaseConfig';
@@ -35,6 +35,7 @@ interface AvailableNodeOption {
 export function FlowPage() {
   // Get the agentId from the URL parameters (if editing an existing agent)
   const { agentId } = useParams<{ agentId: string }>();
+  const navigate = useNavigate();
 
   // State for nodes and edges
   const [nodes, setNodes] = useState<Node[]>([]);
@@ -223,33 +224,33 @@ export function FlowPage() {
     <div className="flex flex-col h-screen">
       {/* Top Bar */}
       <header className="flex justify-between items-center p-4 bg-zinc-900">
-        <h1 className="text-xl font-bold text-purple-300">Agent Flow Editor</h1>
+        <h1 className="text-4xl font-bold text-purple-300">Agent Flow Editor</h1>
         <div className="space-x-2">
-          <Button variant="default" onClick={handleSaveData}>Save</Button>
-          <Button variant="ghost">Help</Button>
+          <Button className="bg-purple-300 text-black" variant="ghost" onClick={handleSaveData}>Save</Button>
+          <Button className="bg-purple-300 text-black" variant="ghost">Help</Button>
         </div>
       </header>
 
       <div className="flex flex-1 overflow-hidden text-gray-300 bg-zinc-900">
         {/* Sidebar */}
-        <aside className="w-[20%] p-4 space-y-4 bg-zinc-900">
+        <aside className="w-[24%] pl-4 pr-4 space-y-4 bg-zinc-900 flex flex-col justify-between">
           <Card className='bg-zinc-800'>
-            <CardHeader className="text-left text-purple-300">
+            <CardHeader className="text-3xl text-left text-purple-300">
               <CardTitle>Components</CardTitle>
             </CardHeader>
             <CardContent className="text-left text-purple-300">
               <Input
-                className="w-full mb-2 bg-white text-black"
+                className="w-full mb-5 bg-white text-black rounded-2xl"
                 placeholder="Search nodes..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-              <div className="max-h-[40%] overflow-y-auto">
+              <div className="max-h-[80%] overflow-y-auto">
                 <ul className="space-y-2 text-left">
                   {filteredNodes.map((nodeOption) => (
                     <li key={nodeOption.label}>
                       <Button
-                        className="w-[80%] text-left bg-purple-300 text-black"
+                        className="w-full text-left bg-purple-300 text-black"
                         variant="outline"
                         onClick={() => handleAddNode(nodeOption)}
                       >
@@ -261,6 +262,11 @@ export function FlowPage() {
               </div>
             </CardContent>
           </Card>
+          <div className='pb-4'>
+            <Button className="bg-purple-300 text-black" variant="ghost" onClick={() => navigate("/agents")}>
+              Back
+            </Button>
+          </div>
         </aside>
         {/* Main React Flow Area */}
         <main className="flex-1">
