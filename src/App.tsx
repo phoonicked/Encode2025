@@ -9,7 +9,7 @@ import {
 import WormholeScreen from "./WormholeScreen";
 import Cart from "./cart";
 import { FlowPage } from "./flowpage";
-import { handleMint } from "./minter";
+import { handleMint } from "./lib/minter";
 import { Button } from "./components/ui/button";
 import AgentsDashboard from "./Dashboard";
 import { ReactFlowProvider } from "@xyflow/react";
