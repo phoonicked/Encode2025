@@ -12,6 +12,7 @@ import Marketplace from "./marketplace";
 import { createWalletClient, custom } from "viem";
 import { sepolia } from "viem/chains";
 import Logo from "./assets/logo.svg"; // Import the logo SVG file
+import Marketreg from "./marketreg";
 
 function HomeScreen({
   walletAddress,
@@ -161,6 +162,15 @@ function AgentsDashboardWrapper() {
   );
 }
 
+// Wrapper for Marketreg
+function MarketregWrapper() {
+  return (
+    <div className="min-h-screen">
+      <Marketreg />
+    </div>
+  );
+}
+
 // Main App component with router configuration
 function App() {
   const [walletAddress, setWalletAddress] = useState<string>("");
@@ -202,6 +212,7 @@ function App() {
         <Route path="/wormhole" element={<WormholeWrapper />} />
         <Route path="/agents" element={<AgentsDashboardWrapper />} />
         <Route path="/marketplace" element={<MarketplaceWrapper />} />
+        <Route path="/marketreg" element={<MarketregWrapper />} />
       </Routes>
     </BrowserRouter>
   );

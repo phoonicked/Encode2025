@@ -1,6 +1,10 @@
 // src/components/Marketplace.tsx
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { lease } from "./lib/leaser";
+import { collection, onSnapshot } from "firebase/firestore";
+import { db } from "./firebaseConfig"; // Adjust the path if needed
+import { useNavigate } from "react-router-dom";
+import { PlusCircle } from "lucide-react";
 
 interface Product {
   id: number;
@@ -8,47 +12,8 @@ interface Product {
   description: string;
   category: string;
   price: number;
+  coin: string;
 }
-
-const sampleProducts: Product[] = [
-  {
-    id: 1,
-    name: "OpenAI API Basic",
-    description: "Access to basic GPT-3.5 models with 100k tokens per month",
-    category: "LLM",
-    price: 20,
-  },
-  {
-    id: 2,
-    name: "OpenAI API Pro",
-    description:
-      "Full access to GPT-4 models with priority support and 500k tokens per month",
-    category: "LLM",
-    price: 50,
-  },
-  {
-    id: 3,
-    name: "Stripe API",
-    description:
-      "Payment processing and advanced transaction management features",
-    category: "Payment",
-    price: 15,
-  },
-  {
-    id: 4,
-    name: "Weather API",
-    description: "Real-time weather data, forecasting, and historical trends",
-    category: "Weather",
-    price: 10,
-  },
-  {
-    id: 5,
-    name: "Maps API",
-    description: "Geolocation, mapping, and route optimization services",
-    category: "Location",
-    price: 25,
-  },
-];
 
 const categories = ["Sports", "LLM", "Weather", "Payment"];
 const sortOptions = ["Release", "Lowest Price", "Highest Price"];
@@ -65,6 +30,28 @@ export default function Marketplace() {
     null
   );
 
+  const [shopItems, setShopItems] = useState<any[]>([]);
+  const navigate = useNavigate();
+
+  // Listen to real-time updates from the "market" collection
+  useState(() => {
+    const marketRef = collection(db, "market");
+    const unsubscribe = onSnapshot(
+      marketRef,
+      (snapshot) => {
+        const marketData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setShopItems(marketData);
+      },
+      (error) => {
+        console.error("Error fetching markets:", error);
+      }
+    );
+    return () => unsubscribe();
+  });
+
   const handleBuy = (product: Product) => {
     setPurchasedProduct(product);
     setShowModal(true);
@@ -77,7 +64,7 @@ export default function Marketplace() {
 
   // Compute the filtered products
   const filteredProducts = useMemo(() => {
-    let filtered = sampleProducts;
+    let filtered = shopItems;
 
     if (searchQuery.trim().length > 0) {
       filtered = filtered.filter((product) =>
@@ -116,7 +103,7 @@ export default function Marketplace() {
     }
 
     return filtered;
-  }, [searchQuery, selectedCategories, minPrice, maxPrice, sortOption]);
+  }, [searchQuery, selectedCategories, minPrice, maxPrice, sortOption, shopItems]);
 
   // Determine if filters are not applied
   const showHero =
@@ -281,6 +268,15 @@ export default function Marketplace() {
           )}
         </div>
       </main>
+      <div className="absolute bottom-6 right-6">
+          <button
+            className="flex items-center gap-2 bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg"
+            onClick={() => navigate("/marketreg")}
+          >
+            <PlusCircle size={18} />
+            <span>Create New</span>
+          </button>
+        </div>
       {showModal && purchasedProduct && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
           <div className="bg-zinc-800 rounded-lg p-6 w-full max-w-sm text-center shadow-xl">

@@ -5,7 +5,7 @@ import Flow from './components/flow'; // Your stateless Flow component
 // Import your UI components (adjust the paths as needed)
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 // Import Firestore functions, including getDoc for loading agent data
 import { collection, setDoc, doc, getDoc } from 'firebase/firestore';
 import { db } from './firebaseConfig';
@@ -16,7 +16,6 @@ import {
   applyEdgeChanges,
   type Node,
   type Edge,
-  type Connection,
   type OnNodesChange,
   type OnEdgesChange,
   type OnConnect,
