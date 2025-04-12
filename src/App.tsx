@@ -7,9 +7,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 import WormholeScreen from "./WormholeScreen";
-import Cart from "./cart";
 import { FlowPage } from "./flowpage";
-import { handleMint } from "./lib/minter";
 import { Button } from "./components/ui/button";
 import AgentsDashboard from "./Dashboard";
 import { ReactFlowProvider } from "@xyflow/react";
@@ -172,14 +170,6 @@ function AgentsDashboardWrapper() {
       <AgentsDashboard />
     </div>
   );
-}
-
-function CartWrapper() {
-  return (
-    <div className="min-h-screen">
-      <Cart />
-    </div>
-  )
 }
 
 // Main App component with router configuration
