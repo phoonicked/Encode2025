@@ -222,6 +222,8 @@ function App() {
         <Route path="/flowpage/:agentId" element={<FlowPageWrapper />} />
         <Route path="/wormhole" element={<WormholeWrapper />} />
         <Route path="/agents" element={<AgentsDashboardWrapper />} />
+        <Route path="/marketplace" element={<MarketplaceWrapper />} />
+
       </Routes>
     </BrowserRouter>
   );
