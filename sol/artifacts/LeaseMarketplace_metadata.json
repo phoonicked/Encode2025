@@ -1,0 +1,347 @@
+{
+	"compiler": {
+		"version": "0.8.26+commit.8a97fa7a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"stateMutability": "payable",
+				"type": "constructor"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "assetId",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "buyer",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "leaseStart",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "leaseDuration",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "price",
+						"type": "uint256"
+					}
+				],
+				"name": "AssetLeased",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "assetId",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "hourlyRate",
+						"type": "uint256"
+					}
+				],
+				"name": "AssetRegistered",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "assetId",
+						"type": "uint256"
+					}
+				],
+				"name": "LeaseEnded",
+				"type": "event"
+			},
+			{
+				"stateMutability": "payable",
+				"type": "fallback"
+			},
+			{
+				"inputs": [],
+				"name": "SECONDS_PER_HOUR",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "assets",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "hourlyRate",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "assetId",
+						"type": "uint256"
+					}
+				],
+				"name": "endLease",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "assetId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "duration",
+						"type": "uint256"
+					}
+				],
+				"name": "getLeasePrice",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "assetId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "duration",
+						"type": "uint256"
+					}
+				],
+				"name": "leaseAsset",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "leases",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "buyer",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "leaseStart",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "leaseDuration",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "active",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "pendingWithdrawals",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "assetId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "hourlyRate",
+						"type": "uint256"
+					}
+				],
+				"name": "registerAsset",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "withdraw",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"stateMutability": "payable",
+				"type": "receive"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {
+				"endLease(uint256)": {
+					"params": {
+						"assetId": "The asset whose lease you wish to end."
+					}
+				},
+				"getLeasePrice(uint256,uint256)": {
+					"params": {
+						"assetId": "The unique identifier of the asset.",
+						"duration": "Lease duration in seconds."
+					},
+					"returns": {
+						"_0": "The required payment in wei.  Calculation: requiredPayment = (hourlyRate * duration) / SECONDS_PER_HOUR."
+					}
+				},
+				"leaseAsset(uint256,uint256)": {
+					"params": {
+						"assetId": "The unique identifier of the asset to lease.",
+						"duration": "Lease duration in seconds. The caller must send at least the required Ether (using the value field)."
+					}
+				},
+				"registerAsset(uint256,uint256)": {
+					"params": {
+						"assetId": "A unique identifier for the asset.",
+						"hourlyRate": "The leasing rate in ether per hour (e.g., 0.01 ether)."
+					}
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"endLease(uint256)": {
+					"notice": "End a lease if its period has expired."
+				},
+				"getLeasePrice(uint256,uint256)": {
+					"notice": "Calculate the lease price for an asset given a duration."
+				},
+				"leaseAsset(uint256,uint256)": {
+					"notice": "Lease an asset for a given duration."
+				},
+				"registerAsset(uint256,uint256)": {
+					"notice": "Register an asset for leasing."
+				},
+				"withdraw()": {
+					"notice": "Allow asset owners to withdraw their earnings."
+				}
+			},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"sol/Leasing.sol": "LeaseMarketplace"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"sol/Leasing.sol": {
+			"keccak256": "0x064531f7aab4ff62aa9ede24315bfd69d9cbbaf452ea58c259b32d739bdfd122",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://74c416fb168493f0c393f1d02716ef7a63a314e7d5d5a7fc31c45e126a40609d",
+				"dweb:/ipfs/QmV6asHwygx1mTL8CXAQFRBtvn8ZRu1ZZo61k5E7T6zLKq"
+			]
+		}
+	},
+	"version": 1
+}
