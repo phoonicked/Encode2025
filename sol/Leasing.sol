@@ -45,10 +45,10 @@ contract LeaseMarketplace {
     function registerAsset(uint256 assetId, uint256 hourlyRate) external {
         require(assets[assetId].owner == address(0), "Asset already registered");
         assets[assetId] = Asset({
-            owner: msg.sender,
+            owner: address(this),
             hourlyRate: hourlyRate   // Use ether literal, e.g., 0.01 ether.
         });
-        emit AssetRegistered(assetId, msg.sender, hourlyRate);
+        emit AssetRegistered(assetId, address(this), hourlyRate);
     }
     
     /// @notice Calculate the lease price for an asset given a duration.
@@ -97,16 +97,28 @@ contract LeaseMarketplace {
             payable(msg.sender).transfer(msg.value - requiredPayment);
         }
     }
-    
-    /// @notice End a lease if its period has expired.
-    /// @param assetId The asset whose lease you wish to end.
-    function endLease(uint256 assetId) external {
+
+    /// @notice Check if the sender has an active lease on the specified asset.
+    ///         If the lease has expired, it will be automatically cleared.
+    /// @param assetId The unique identifier of the asset.
+    /// @return True if the sender has an active lease on the asset.
+    function isLeased(uint256 assetId) external returns (bool) {
         Lease storage lease = leases[assetId];
-        require(lease.active, "No active lease");
-        require(block.timestamp >= lease.leaseStart + lease.leaseDuration, "Lease period not yet expired");
-        lease.active = false;
-        emit LeaseEnded(assetId);
+        if (!lease.active) {
+            return false;
+        }
+
+        // If lease has expired, deactivate it
+        if (block.timestamp >= lease.leaseStart + lease.leaseDuration) {
+            lease.active = false;
+            emit LeaseEnded(assetId);
+            return false;
+        }
+
+        // Lease is active and not expired
+        return lease.buyer == msg.sender;
     }
+
     
     /// @notice Allow asset owners to withdraw their earnings.
     function withdraw() external {

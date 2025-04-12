@@ -1,5 +1,6 @@
 // src/components/Marketplace.tsx
 import React, { useState, useMemo } from "react";
+import { lease } from "./lib/leaser";
 
 interface Product {
   id: number;
@@ -228,7 +229,14 @@ export default function Marketplace() {
                 comes with special features and a limited time offer.
               </p>
               <div className="mt-4">
-                <button className="bg-purple-300 text-black px-4 py-2 rounded">
+                <button
+                  className="bg-purple-300 text-black px-4 py-2 rounded"
+                  onClick={() => {
+                    (async () => {
+                      lease();
+                    })();
+                  }}
+                >
                   Buy Now
                 </button>
               </div>

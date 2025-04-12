@@ -2,9 +2,7 @@
 import { useState } from "react";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import WormholeScreen from "./WormholeScreen";
-import Cart from "./cart";
 import { FlowPage } from "./flowpage";
-import { handleMint } from "./minter";
 import { Button } from "./components/ui/button";
 import AgentsDashboard from "./Dashboard";
 import { ReactFlowProvider } from "@xyflow/react";
@@ -159,14 +157,6 @@ function AgentsDashboardWrapper() {
   return (
     <div className="min-h-screen">
       <AgentsDashboard />
-    </div>
-  );
-}
-
-function CartWrapper() {
-  return (
-    <div className="min-h-screen">
-      <Cart />
     </div>
   );
 }

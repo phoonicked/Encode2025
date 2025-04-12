@@ -5,7 +5,6 @@ import {
   PlusCircle,
   BarChart2,
   Bot,
-  Info,
   PlayCircle,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -50,7 +49,15 @@ export default function AgentsDashboard() {
       {/* Sidebar */}
       <div className="w-60 border-r border-gray-800 p-4 flex flex-col justify-between bg-[rgb(39,39,42)]">
         <div>
-          <img src={logo} alt="Logo" className="w-12 h-auto object-contain" />
+          <div className="flex flex-row justify-content-center gap-2 mb-4">
+            <img src={logo} alt="Logo" className="w-12 h-auto object-contain" />
+            <h3
+              className="text-3xl font-bold text-purple-300"
+              style={{ fontFamily: "kugile" }}
+            >
+              IRIS
+            </h3>
+          </div>
           <div className="space-y-4">
             <div className="flex items-center gap-2 p-2 text-white transition-colors duration-300 hover:text-purple-300 cursor-pointer">
               <Bot size={18} />
