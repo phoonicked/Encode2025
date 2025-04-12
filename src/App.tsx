@@ -15,6 +15,7 @@ import AgentsDashboard from "./Dashboard";
 import { ReactFlowProvider } from "@xyflow/react";
 import DeformCanvas from "./components/DeformCanvas";
 import { Globe, LayoutDashboard, Wallet } from "lucide-react";
+import Marketplace from "./marketplace";
 import { createWalletClient, custom } from "viem";
 import { sepolia } from "viem/chains";
 import Logo from "./assets/logo.svg"; // Import the logo SVG file
@@ -108,6 +109,7 @@ function HomeScreen({
               <LayoutDashboard />
               Dashboard
             </Button>
+            {/* Wrap Connect Wallet in a relative container to show tooltip on hover */}
             <div className="relative group w-1/2">
               <Button
                 variant="default"
@@ -132,6 +134,14 @@ function FlowPageWrapper() {
       <ReactFlowProvider>
         <FlowPage />
       </ReactFlowProvider>
+    </div>
+  );
+}
+
+function MarketplaceWrapper() {
+  return (
+    <div className="min-h-screen">
+      <Marketplace />
     </div>
   );
 }
@@ -212,7 +222,8 @@ function App() {
         <Route path="/flowpage/:agentId" element={<FlowPageWrapper />} />
         <Route path="/wormhole" element={<WormholeWrapper />} />
         <Route path="/agents" element={<AgentsDashboardWrapper />} />
-        <Route path="/cart" element={<CartWrapper />}/>
+        <Route path="/marketplace" element={<MarketplaceWrapper />} />
+
       </Routes>
     </BrowserRouter>
   );
