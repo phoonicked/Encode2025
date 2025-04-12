@@ -13,6 +13,12 @@ import { createWalletClient, custom } from "viem";
 import { sepolia } from "viem/chains";
 import Logo from "./assets/logo.svg"; // Import the logo SVG file
 import Marketreg from "./marketreg";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./components/ui/tooltip";
 
 function HomeScreen({
   walletAddress,
@@ -42,17 +48,29 @@ function HomeScreen({
       {/* Panel in the top right */}
       <div className="absolute top-4 right-4 flex flex-col items-center gap-2">
         {walletAddress && (
-          <div className="bg-zinc-800 p-4 rounded-lg shadow-lg">
-            {/* Connection Status Indicator */}
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-green-500" />
-              <span className="text-sm">Connected</span>
-            </div>
-            {/* Wallet Address */}
-            <div className="text-xs text-gray-400 text-center break-all">
-              {walletAddress}
-            </div>
-          </div>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <Button
+                  variant="default"
+                  className="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-white rounded-full"
+                >
+                  <div className="flex items-center gap-2">
+                    <div className="relative flex">
+                      <span className="absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75 animate-ping"></span>
+                      <span className="relative inline-flex h-3 w-3 rounded-full bg-green-500"></span>
+                    </div>
+                    <span className="text-sm">Connected</span>
+                  </div>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p className="text-xs text-gray-400 break-all">
+                  {walletAddress}
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         )}
         {!walletAddress && (
           <div className="relative group">
