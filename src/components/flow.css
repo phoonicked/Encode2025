@@ -3,17 +3,21 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  border: 2px solid #000;
+  border: 1px solid #000;
 }
 
 .react-flow__handle[data-type="input/text"],
 .react-flow__handle[data-type="output/text"] {
   background-color: #00ff00;
+  width: 10px;
+  height: 10px;
 }
 
 .react-flow__handle[data-type="input/nft"],
 .react-flow__handle[data-type="output/nft"] {
   background-color: #0000ff;
+  width: 10px;
+  height: 10px;
 }
 
 .react-flow {
@@ -32,6 +36,12 @@
 
 .react-flow__node.selected {
   background-color: #27272A; 
-  border: 5px solid #a855f7;
+  border: 5px solid #e9d5ff ;
   border-radius: 16px; 
+}
+
+.react-flow__edge-path {
+  stroke: #ffff; 
+  stroke-width: 3px;
+  stroke-dasharray: 2 2; 
 }

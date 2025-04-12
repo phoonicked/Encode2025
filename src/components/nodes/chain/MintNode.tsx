@@ -26,13 +26,13 @@ export default function MintNode({ data, id }: MintNodeProps) {
       <Handle type="target" position={Position.Left} id="input/text" data-type="input/text" />
       <Card>
         <CardHeader>
-          <CardTitle>Mint NFT</CardTitle>
-          <CardDescription>Mint an NFT on a specific blockchain.</CardDescription>
+          <CardTitle className='text-purple-300'>Mint NFT</CardTitle>
+          <CardDescription className='text-purple-200'>Mint an NFT on a specific blockchain.</CardDescription>
         </CardHeader>
         <CardContent>
           {/* Chain Selection */}
           <div className="grid w-full max-w-sm items-center gap-1.5">
-            <Label htmlFor="chain">Blockchain</Label>
+            <Label className='text-purple-200' htmlFor="chain">Blockchain</Label>
             <Select
               value={data.chain || ''}
               onValueChange={(value) => updateNodeData(id, { chain: value })}
@@ -50,7 +50,7 @@ export default function MintNode({ data, id }: MintNodeProps) {
 
           {/* Metadata Input */}
           <div className="grid w-full max-w-sm items-center gap-1.5 mt-4">
-            <Label htmlFor="metadata">NFT Metadata</Label>
+            <Label className='text-purple-200' htmlFor="metadata">NFT Metadata</Label>
             <Textarea
               id="metadata"
               placeholder="Enter NFT metadata..."

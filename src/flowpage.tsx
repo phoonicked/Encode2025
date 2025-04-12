@@ -1,6 +1,6 @@
 // src/components/FlowPage.tsx
 import React, { useState, useCallback, useEffect, DragEvent } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';  // Import useParams for route parameters
+import { Link, useNavigate, useParams } from 'react-router-dom';  // Import useParams for route parameters
 import Flow from './components/flow'; // Your stateless Flow component
 // Import your UI components (adjust the paths as needed)
 import { Button } from '@/components/ui/button';
@@ -25,6 +25,7 @@ import {
   getConnectedEdges,
   IsValidConnection,
 } from '@xyflow/react';
+import { ArrowLeft } from 'lucide-react';
 
 interface AvailableNodeOption {
   label: string;
@@ -311,9 +312,13 @@ export function FlowPage() {
             </CardContent>
           </Card>
           <div className='pb-4'>
-            <Button className="bg-purple-300 text-black" variant="ghost" onClick={() => navigate("/agents")}>
-              Back
-            </Button>
+          <Link
+              to="/agents"
+              className="flex items-center gap-2 text-lg mb-8 text-purple-300"
+            >
+              <ArrowLeft size={20} />
+              <span>Back</span>
+            </Link>
           </div>
         </aside>
         {/* Main React Flow Area */}
