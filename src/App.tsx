@@ -7,6 +7,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 import WormholeScreen from "./WormholeScreen";
+import Cart from "./cart";
 import { FlowPage } from "./flowpage";
 import { handleMint } from "./minter";
 import { Button } from "./components/ui/button";
@@ -163,6 +164,14 @@ function AgentsDashboardWrapper() {
   );
 }
 
+function CartWrapper() {
+  return (
+    <div className="min-h-screen">
+      <Cart />
+    </div>
+  )
+}
+
 // Main App component with router configuration
 function App() {
   const [walletAddress, setWalletAddress] = useState<string>("");
@@ -203,6 +212,7 @@ function App() {
         <Route path="/flowpage/:agentId" element={<FlowPageWrapper />} />
         <Route path="/wormhole" element={<WormholeWrapper />} />
         <Route path="/agents" element={<AgentsDashboardWrapper />} />
+        <Route path="/cart" element={<CartWrapper />}/>
       </Routes>
     </BrowserRouter>
   );
