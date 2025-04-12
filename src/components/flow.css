@@ -29,3 +29,9 @@
   border: 5px solid #d8b4fe;
   border-radius: 16px; 
 }
+
+.react-flow__node.selected {
+  background-color: #27272A; 
+  border: 5px solid #a855f7;
+  border-radius: 16px; 
+}

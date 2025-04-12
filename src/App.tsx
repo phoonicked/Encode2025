@@ -14,6 +14,7 @@ import AgentsDashboard from "./Dashboard";
 import { ReactFlowProvider } from "@xyflow/react";
 import DeformCanvas from "./components/DeformCanvas";
 import { LayoutDashboard, Wallet } from "lucide-react";
+import Marketplace from "./marketplace";
 
 
 function HomeScreen({
@@ -58,6 +59,14 @@ function HomeScreen({
             >
               <LayoutDashboard />
               Dashboard
+            </Button>
+            <Button
+              variant="default"
+              className="w-1/2 flex items-center justify-center gap-2 rounded-full px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-white"
+              onClick={() => navigate("/marketplace")}
+            >
+              <LayoutDashboard />
+              Marketplace
             </Button>
             {/* Wrap Connect Wallet in a relative container to show tooltip on hover */}
             <div className="relative group w-1/2">
@@ -119,6 +128,14 @@ function FlowPageWrapper() {
       <ReactFlowProvider>
         <FlowPage />
       </ReactFlowProvider>
+    </div>
+  );
+}
+
+function MarketplaceWrapper() {
+  return (
+    <div className="min-h-screen">
+      <Marketplace />
     </div>
   );
 }
@@ -214,6 +231,8 @@ function App() {
           element={<ZoraMintWrapper walletAddress={walletAddress} />}
         />
         <Route path="/agents" element={<AgentsDashboardWrapper />} />
+        <Route path="/marketplace" element={<MarketplaceWrapper />} />
+        <Route path="/marketplace/:productId" element={<MarketplaceWrapper />} />
       </Routes>
     </BrowserRouter>
   );
